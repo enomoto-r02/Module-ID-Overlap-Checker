@@ -101,6 +101,7 @@ namespace Module_ID_Overlap_Checker.DIVA
         public static void ViewTest(DivaModManager dmm)
         {
             StringBuilder sb = new();
+            sb.Append("mod\tchara\tkey_name\titem\tkey_no\tvalue\n");      // header
 
             foreach (var mod in dmm.Mods)
             {
@@ -143,9 +144,12 @@ namespace Module_ID_Overlap_Checker.DIVA
                 var key_name = "item." + i.ToString() + ".name";
                 var key_no = "item." + i.ToString() + ".no";
                 s += string.Join("\t", 
-                    "[" + mod.Name + "]", 
+                    "[" + mod.Name + "]",
+                    chara_name,
+                    key_name,
                     mod.itmTbl.itmData.GetCharaData(chara_name, key_name), 
-                    chara_name, mod.itmTbl.itmData.GetCharaData(chara_name, key_no)
+                    key_no,
+                    mod.itmTbl.itmData.GetCharaData(chara_name, key_no)
                 ) + "\n";
             }
 
