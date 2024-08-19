@@ -116,7 +116,14 @@ namespace Module_ID_Overlap_Checker.DIVA
                 sb.AppendLine(ViewTestChara("SAK", mod, FILE_TXT_ITEM_TABLE_SAK));
             }
 
-            FileUtil.WriteFile_UTF_8_NO_BOM(sb.ToString(), "result.txt", false);
+            StringBuilder sb_out = new();
+            foreach(var line in sb.ToString().Split("\n"))
+            {
+                if (string.IsNullOrEmpty(line.Trim())) continue;
+                sb_out.AppendLine(line);
+            }
+
+            FileUtil.WriteFile_UTF_8_NO_BOM(sb_out.ToString(), "result.txt", false);
         }
 
         private static string ViewTestChara(string chara_name, Mod mod, string key)
