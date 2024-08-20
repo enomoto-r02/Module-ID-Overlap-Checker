@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Module_ID_Overlap_Checker.Util;
+using System.Runtime.CompilerServices;
 
 namespace Module_ID_Overlap_Checker.DIVA
 {
@@ -31,7 +32,7 @@ namespace Module_ID_Overlap_Checker.DIVA
             this.itm_tbl = new();
         }
 
-        public static IConfigurationRoot GetCharaTbl(string dirName, string fileTextItemTable)
+        public static IConfigurationRoot GetCharaTbl(Mod mod, string dirName, string fileTextItemTable)
         {
             IConfigurationRoot ret = null;
 
@@ -46,7 +47,7 @@ namespace Module_ID_Overlap_Checker.DIVA
                 }
                 catch (Exception e)
                 {
-                    ToolUtil.ErrorLog(e.Message + " : " + e.StackTrace);
+                    ToolUtil.ErrorLog("\""+mod.Name + "\" mod is Failed. \n" + e.Message + "\n" + e.InnerException + "\n"+ e.StackTrace);
                     ret = null;
 
                     //throw e;

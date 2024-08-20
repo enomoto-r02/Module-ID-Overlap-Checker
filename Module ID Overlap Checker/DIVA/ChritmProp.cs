@@ -80,16 +80,16 @@ namespace Module_ID_Overlap_Checker.DIVA
 
                     ItmTbl itm_tbl = new ItmTbl(mod);
 
-                    itm_tbl.itmData.itm_tbl.Add("MIK", ItmData.GetCharaTbl(dirName, ChritmProp.FILE_TXT_ITEM_TABLE_MIK));
-                    itm_tbl.itmData.itm_tbl.Add("RIN", ItmData.GetCharaTbl(dirName, ChritmProp.FILE_TXT_ITEM_TABLE_RIN));
-                    itm_tbl.itmData.itm_tbl.Add("LEN", ItmData.GetCharaTbl(dirName, ChritmProp.FILE_TXT_ITEM_TABLE_LEN));
-                    itm_tbl.itmData.itm_tbl.Add("LUK", ItmData.GetCharaTbl(dirName, ChritmProp.FILE_TXT_ITEM_TABLE_LUK));
-                    itm_tbl.itmData.itm_tbl.Add("MEI", ItmData.GetCharaTbl(dirName, ChritmProp.FILE_TXT_ITEM_TABLE_MEI));
-                    itm_tbl.itmData.itm_tbl.Add("KAI", ItmData.GetCharaTbl(dirName, ChritmProp.FILE_TXT_ITEM_TABLE_KAI));
-                    itm_tbl.itmData.itm_tbl.Add("HAK", ItmData.GetCharaTbl(dirName, ChritmProp.FILE_TXT_ITEM_TABLE_HAK));
-                    itm_tbl.itmData.itm_tbl.Add("TET", ItmData.GetCharaTbl(dirName, ChritmProp.FILE_TXT_ITEM_TABLE_TET));
-                    itm_tbl.itmData.itm_tbl.Add("NER", ItmData.GetCharaTbl(dirName, ChritmProp.FILE_TXT_ITEM_TABLE_NER));
-                    itm_tbl.itmData.itm_tbl.Add("SAK", ItmData.GetCharaTbl(dirName, ChritmProp.FILE_TXT_ITEM_TABLE_SAK));
+                    itm_tbl.itmData.itm_tbl.Add("MIK", ItmData.GetCharaTbl(mod, dirName, ChritmProp.FILE_TXT_ITEM_TABLE_MIK));
+                    itm_tbl.itmData.itm_tbl.Add("RIN", ItmData.GetCharaTbl(mod, dirName, ChritmProp.FILE_TXT_ITEM_TABLE_RIN));
+                    itm_tbl.itmData.itm_tbl.Add("LEN", ItmData.GetCharaTbl(mod, dirName, ChritmProp.FILE_TXT_ITEM_TABLE_LEN));
+                    itm_tbl.itmData.itm_tbl.Add("LUK", ItmData.GetCharaTbl(mod, dirName, ChritmProp.FILE_TXT_ITEM_TABLE_LUK));
+                    itm_tbl.itmData.itm_tbl.Add("MEI", ItmData.GetCharaTbl(mod, dirName, ChritmProp.FILE_TXT_ITEM_TABLE_MEI));
+                    itm_tbl.itmData.itm_tbl.Add("KAI", ItmData.GetCharaTbl(mod, dirName, ChritmProp.FILE_TXT_ITEM_TABLE_KAI));
+                    itm_tbl.itmData.itm_tbl.Add("HAK", ItmData.GetCharaTbl(mod, dirName, ChritmProp.FILE_TXT_ITEM_TABLE_HAK));
+                    itm_tbl.itmData.itm_tbl.Add("TET", ItmData.GetCharaTbl(mod, dirName, ChritmProp.FILE_TXT_ITEM_TABLE_TET));
+                    itm_tbl.itmData.itm_tbl.Add("NER", ItmData.GetCharaTbl(mod, dirName, ChritmProp.FILE_TXT_ITEM_TABLE_NER));
+                    itm_tbl.itmData.itm_tbl.Add("SAK", ItmData.GetCharaTbl(mod, dirName, ChritmProp.FILE_TXT_ITEM_TABLE_SAK));
 
                     mod.itmTbl = itm_tbl;
 
