@@ -15,17 +15,6 @@ namespace Module_ID_Overlap_Checker.DIVA
         public static readonly string FILE_FARC_CHRITM_PROP_MOD = "mod_chritm_prop.farc";
         public static readonly string FILE_FARC_CHRITM_PROP_MDATA = "mdata_chritm_prop.farc";
 
-        public static readonly string FILE_TXT_ITEM_TABLE_MIK = "mikitm_tbl.txt";
-        public static readonly string FILE_TXT_ITEM_TABLE_RIN = "rinitm_tbl.txt";
-        public static readonly string FILE_TXT_ITEM_TABLE_LEN = "lenitm_tbl.txt";
-        public static readonly string FILE_TXT_ITEM_TABLE_LUK = "lukitm_tbl.txt";
-        public static readonly string FILE_TXT_ITEM_TABLE_MEI = "meiitm_tbl.txt";
-        public static readonly string FILE_TXT_ITEM_TABLE_KAI = "kaiitm_tbl.txt";
-        public static readonly string FILE_TXT_ITEM_TABLE_HAK = "hakitm_tbl.txt";
-        public static readonly string FILE_TXT_ITEM_TABLE_TET = "tetitm_tbl.txt";
-        public static readonly string FILE_TXT_ITEM_TABLE_NER = "neritm_tbl.txt";
-        public static readonly string FILE_TXT_ITEM_TABLE_SAK = "sakitm_tbl.txt";
-
 
         public static bool Init()
         {
@@ -38,16 +27,10 @@ namespace Module_ID_Overlap_Checker.DIVA
                 FileUtil.Delete(ChritmPropLogic.FILE_FARC_CHRITM_PROP_MOD);
                 FileUtil.Delete(ChritmPropLogic.FILE_FARC_CHRITM_PROP_MDATA);
 
-                FileUtil.Delete(dirName + "/" + ChritmPropLogic.FILE_TXT_ITEM_TABLE_MIK);
-                FileUtil.Delete(dirName + "/" + ChritmPropLogic.FILE_TXT_ITEM_TABLE_RIN);
-                FileUtil.Delete(dirName + "/" + ChritmPropLogic.FILE_TXT_ITEM_TABLE_LEN);
-                FileUtil.Delete(dirName + "/" + ChritmPropLogic.FILE_TXT_ITEM_TABLE_LUK);
-                FileUtil.Delete(dirName + "/" + ChritmPropLogic.FILE_TXT_ITEM_TABLE_MEI);
-                FileUtil.Delete(dirName + "/" + ChritmPropLogic.FILE_TXT_ITEM_TABLE_KAI);
-                FileUtil.Delete(dirName + "/" + ChritmPropLogic.FILE_TXT_ITEM_TABLE_HAK);
-                FileUtil.Delete(dirName + "/" + ChritmPropLogic.FILE_TXT_ITEM_TABLE_TET);
-                FileUtil.Delete(dirName + "/" + ChritmPropLogic.FILE_TXT_ITEM_TABLE_NER);
-                FileUtil.Delete(dirName + "/" + ChritmPropLogic.FILE_TXT_ITEM_TABLE_SAK);
+                foreach (var key in DivaUtil.CHARA_ITM_TBL.Keys)
+                {
+                    FileUtil.Delete(dirName + "/" + DivaUtil.CHARA_ITM_TBL[key]);
+                }
 
                 // フォルダが空なら削除
                 if (Directory.Exists(dirName) && Directory.EnumerateFileSystemEntries(dirName).Any() == false)
@@ -78,23 +61,17 @@ namespace Module_ID_Overlap_Checker.DIVA
 
                     string dirName = Path.GetFileNameWithoutExtension(FILE_FARC_CHRITM_PROP_MOD);
 
-                    mod.Item_Tbl.Add("MIK", Mod.GetCharaTbl2(mod, "MIK", ChritmPropLogic.FILE_TXT_ITEM_TABLE_MIK));
-                    mod.Item_Tbl.Add("RIN", Mod.GetCharaTbl2(mod, "RIN", ChritmPropLogic.FILE_TXT_ITEM_TABLE_RIN));
-                    mod.Item_Tbl.Add("LEN", Mod.GetCharaTbl2(mod, "LEN", ChritmPropLogic.FILE_TXT_ITEM_TABLE_LEN));
-                    mod.Item_Tbl.Add("LUK", Mod.GetCharaTbl2(mod, "LUK", ChritmPropLogic.FILE_TXT_ITEM_TABLE_LUK));
-                    mod.Item_Tbl.Add("MEI", Mod.GetCharaTbl2(mod, "MEI", ChritmPropLogic.FILE_TXT_ITEM_TABLE_MEI));
-                    mod.Item_Tbl.Add("KAI", Mod.GetCharaTbl2(mod, "KAI", ChritmPropLogic.FILE_TXT_ITEM_TABLE_KAI));
-                    mod.Item_Tbl.Add("HAK", Mod.GetCharaTbl2(mod, "HAK", ChritmPropLogic.FILE_TXT_ITEM_TABLE_HAK));
-                    mod.Item_Tbl.Add("TET", Mod.GetCharaTbl2(mod, "TET", ChritmPropLogic.FILE_TXT_ITEM_TABLE_TET));
-                    mod.Item_Tbl.Add("NER", Mod.GetCharaTbl2(mod, "NER", ChritmPropLogic.FILE_TXT_ITEM_TABLE_NER));
-                    mod.Item_Tbl.Add("SAK", Mod.GetCharaTbl2(mod, "SAK", ChritmPropLogic.FILE_TXT_ITEM_TABLE_SAK));
+                    foreach (var chara_key in DivaUtil.CHARA_ITM_TBL.Keys)
+                    {
+                        mod.Item_Tbl.Add(chara_key, Mod.GetCharaTbl(mod, chara_key, DivaUtil.CHARA_ITM_TBL[chara_key]));
+                    }
 
                     ChritmPropLogic.Init();
                 }
             }
         }
 
-        public static void ViewTest(AppConfig config, DivaModManager dmm)
+        public static void ViewChara(AppConfig config, DivaModManager dmm)
         {
             StringBuilder sb = new();
             sb.Append("mod\tchara\tkey_name\titem\tkey_no\tvalue\tLang("+config.Config.Lang+")\n");      // header
@@ -103,7 +80,7 @@ namespace Module_ID_Overlap_Checker.DIVA
             {
                 foreach (var chara_key in DivaUtil.CHARA_ITM_TBL.Keys)
                 {
-                    sb.Append(ViewTestChara(config, chara_key, mod, DivaUtil.CHARA_ITM_TBL[chara_key]));
+                    sb.Append(ViewCharaItems(config, chara_key, mod, DivaUtil.CHARA_ITM_TBL[chara_key]));
                 }
             }
 
@@ -117,7 +94,7 @@ namespace Module_ID_Overlap_Checker.DIVA
             FileUtil.WriteFile_UTF_8_NO_BOM(sb_out.ToString(), "result.txt", false);
         }
 
-        private static string ViewTestChara(AppConfig config, string chara_name, Mod mod, string file_name)
+        private static string ViewCharaItems(AppConfig config, string chara_name, Mod mod, string file_name)
         {
             if (mod.Item_Tbl == null || mod.Item_Tbl.Count == 0)
             {
@@ -126,40 +103,58 @@ namespace Module_ID_Overlap_Checker.DIVA
 
             StringBuilder sb = new();
 
-            Item name = new();
-            Item no= new();
-
-            var chara = "RIN";
-
-            if (mod.Item_Tbl[chara].Count == 0)
+            if (mod.Item_Tbl[chara_name].Count == 0)
             {
                 return null;
             }
 
-            foreach (var item_tbl in mod.Item_Tbl[chara])
+
+            List<Item> names = new();
+            foreach (var item_tbl in mod.Item_Tbl[chara_name])
             {
                 foreach (var item in item_tbl.Items)
                 {
                     if (item.Parameter.Length == 3 && item.Parameter[2] == "name")
                     {
+                        Item name = new Item();
                         name.Parameter = item.Parameter;
                         name.Value = item.Value;
+                        names.Add(name);
                     }
                 }
             }
-            foreach (var item_tbl in mod.Item_Tbl[chara])
+
+            List<Item> nos = new();
+            foreach (var item_tbl in mod.Item_Tbl[chara_name])
             {
                 foreach (var item in item_tbl.Items)
                 {
                     if (item.Parameter.Length == 3 && item.Parameter[2] == "no")
                     {
+                        Item no = new();
                         no.Parameter = item.Parameter;
                         no.Value = item.Value;
+                        nos.Add(no);
                     }
                 }
             }
 
-            Result result = new(mod, chara_name, no, name);
+            List<Item> sub_ids = new();
+            foreach (var item_tbl in mod.Item_Tbl[chara_name])
+            {
+                foreach (var item in item_tbl.Items)
+                {
+                    if (item.Parameter.Length == 3 && item.Parameter[2] == "sub_id")
+                    {
+                        Item sub_id = new();
+                        sub_id.Parameter = item.Parameter;
+                        sub_id.Value = item.Value;
+                        sub_ids.Add(sub_id);
+                    }
+                }
+            }
+
+            Result result = new(mod, chara_name, nos, names, sub_ids);
             sb.Append(result.ToString(config));
 
             return sb.ToString();

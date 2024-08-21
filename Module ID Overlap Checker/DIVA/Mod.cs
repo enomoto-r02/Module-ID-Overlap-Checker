@@ -30,7 +30,7 @@ namespace Module_ID_Overlap_Checker.DIVA
             this.StrArray = new(this);
         }
 
-        public static List<ItemTbl> GetCharaTbl2(Mod mod, string chara_name, string fileTextItemTable)
+        public static List<ItemTbl> GetCharaTbl(Mod mod, string chara_name, string fileTextItemTable)
         {
             List<ItemTbl> ret = new();
 
@@ -57,12 +57,14 @@ namespace Module_ID_Overlap_Checker.DIVA
             return ret;
         }
 
-        public string GetArrayStr(AppConfig config, string value, string str_jp)
+        public string GetArrayStr(AppConfig config, string sub_id, string value, string str_jp)
         {
             if (this.StrArray.Str_Array_Toml == null)
             {
                 return "";
             }
+
+            var type = sub_id == "10" ? "module": "customize";
 
             try
             {
@@ -73,11 +75,11 @@ namespace Module_ID_Overlap_Checker.DIVA
                 }
                 else if(lang_low == "en") 
                 { 
-                    return this.StrArray.Str_Array_Toml.Get<TomlTable>("module").Get(value).ToString();
+                    return this.StrArray.Str_Array_Toml.Get<TomlTable>(type).Get(value).ToString();
                 }
                 else
                 {
-                    return this.StrArray.Str_Array_Toml.Get<TomlTable>(config.Config.Lang).Get<TomlTable>("module").Get(value).ToString();
+                    return this.StrArray.Str_Array_Toml.Get<TomlTable>(config.Config.Lang).Get<TomlTable>(type).Get(value).ToString();
                 }
             }
             catch (Exception e)
