@@ -41,7 +41,7 @@ namespace Module_ID_Overlap_Checker
                 return;
             }
 
-            if (ChritmProp.Init() == false)
+            if (ChritmPropLogic.Init() == false)
             {
                 Console.WriteLine(ToolUtil.CONSOLE_PREFIX + "ChritmProp.Init() is Failed.");
                 Console.WriteLine(ToolUtil.CONSOLE_PREFIX + "Tool Failed.");
@@ -61,9 +61,9 @@ namespace Module_ID_Overlap_Checker
 
             Console.WriteLine(dmm.ToStringMods());
 
-            ChritmProp.Load(appConfig, dmm);
+            ChritmPropLogic.Load(appConfig, dmm);
 
-            ChritmProp.ViewTest(dmm);
+            ChritmPropLogic.ViewTest(dmm);
 
 
 

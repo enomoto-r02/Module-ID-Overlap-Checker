@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Module_ID_Overlap_Checker.DIVA
 {
-    internal class ChritmProp
+    internal class ChritmPropLogic
     {
         public static readonly string DIR_CHRITM_PROP = "chritm_prop";
         public static readonly string FILE_FARC_CHRITM_PROP = "chritm_prop.farc";
@@ -24,8 +24,6 @@ namespace Module_ID_Overlap_Checker.DIVA
         public static readonly string FILE_TXT_ITEM_TABLE_NER = "neritm_tbl.txt";
         public static readonly string FILE_TXT_ITEM_TABLE_SAK = "sakitm_tbl.txt";
 
-        public string Mod_Folder { get; set; }
-
 
         public static bool Init()
         {
@@ -34,20 +32,20 @@ namespace Module_ID_Overlap_Checker.DIVA
             {
                 string dirName = Path.GetFileNameWithoutExtension(FILE_FARC_CHRITM_PROP_MOD);
 
-                FileUtil.Delete(ChritmProp.FILE_FARC_CHRITM_PROP);
-                FileUtil.Delete(ChritmProp.FILE_FARC_CHRITM_PROP_MOD);
-                FileUtil.Delete(ChritmProp.FILE_FARC_CHRITM_PROP_MDATA);
+                FileUtil.Delete(ChritmPropLogic.FILE_FARC_CHRITM_PROP);
+                FileUtil.Delete(ChritmPropLogic.FILE_FARC_CHRITM_PROP_MOD);
+                FileUtil.Delete(ChritmPropLogic.FILE_FARC_CHRITM_PROP_MDATA);
 
-                FileUtil.Delete(dirName + "/" + ChritmProp.FILE_TXT_ITEM_TABLE_MIK);
-                FileUtil.Delete(dirName + "/" + ChritmProp.FILE_TXT_ITEM_TABLE_RIN);
-                FileUtil.Delete(dirName + "/" + ChritmProp.FILE_TXT_ITEM_TABLE_LEN);
-                FileUtil.Delete(dirName + "/" + ChritmProp.FILE_TXT_ITEM_TABLE_LUK);
-                FileUtil.Delete(dirName + "/" + ChritmProp.FILE_TXT_ITEM_TABLE_MEI);
-                FileUtil.Delete(dirName + "/" + ChritmProp.FILE_TXT_ITEM_TABLE_KAI);
-                FileUtil.Delete(dirName + "/" + ChritmProp.FILE_TXT_ITEM_TABLE_HAK);
-                FileUtil.Delete(dirName + "/" + ChritmProp.FILE_TXT_ITEM_TABLE_TET);
-                FileUtil.Delete(dirName + "/" + ChritmProp.FILE_TXT_ITEM_TABLE_NER);
-                FileUtil.Delete(dirName + "/" + ChritmProp.FILE_TXT_ITEM_TABLE_SAK);
+                FileUtil.Delete(dirName + "/" + ChritmPropLogic.FILE_TXT_ITEM_TABLE_MIK);
+                FileUtil.Delete(dirName + "/" + ChritmPropLogic.FILE_TXT_ITEM_TABLE_RIN);
+                FileUtil.Delete(dirName + "/" + ChritmPropLogic.FILE_TXT_ITEM_TABLE_LEN);
+                FileUtil.Delete(dirName + "/" + ChritmPropLogic.FILE_TXT_ITEM_TABLE_LUK);
+                FileUtil.Delete(dirName + "/" + ChritmPropLogic.FILE_TXT_ITEM_TABLE_MEI);
+                FileUtil.Delete(dirName + "/" + ChritmPropLogic.FILE_TXT_ITEM_TABLE_KAI);
+                FileUtil.Delete(dirName + "/" + ChritmPropLogic.FILE_TXT_ITEM_TABLE_HAK);
+                FileUtil.Delete(dirName + "/" + ChritmPropLogic.FILE_TXT_ITEM_TABLE_TET);
+                FileUtil.Delete(dirName + "/" + ChritmPropLogic.FILE_TXT_ITEM_TABLE_NER);
+                FileUtil.Delete(dirName + "/" + ChritmPropLogic.FILE_TXT_ITEM_TABLE_SAK);
 
                 // フォルダが空なら削除
                 if (Directory.Exists(dirName) && Directory.EnumerateFileSystemEntries(dirName).Any() == false)
@@ -71,29 +69,25 @@ namespace Module_ID_Overlap_Checker.DIVA
         {
             foreach(var mod in dmm.Mods)
             {
-                if (File.Exists(mod.Folder_Path +"/rom/"+ ChritmProp.FILE_FARC_CHRITM_PROP_MOD))
+                if (File.Exists(mod.Folder_Path +"/rom/"+ ChritmPropLogic.FILE_FARC_CHRITM_PROP_MOD))
                 {
-                    File.Copy(mod.Folder_Path + "/rom/" + ChritmProp.FILE_FARC_CHRITM_PROP_MOD, ChritmProp.FILE_FARC_CHRITM_PROP_MOD, true);
-                    ToolUtil.ExecFarcPack(appConfig, ChritmProp.FILE_FARC_CHRITM_PROP_MOD);
+                    File.Copy(mod.Folder_Path + "/rom/" + ChritmPropLogic.FILE_FARC_CHRITM_PROP_MOD, ChritmPropLogic.FILE_FARC_CHRITM_PROP_MOD, true);
+                    ToolUtil.ExecFarcPack(appConfig, ChritmPropLogic.FILE_FARC_CHRITM_PROP_MOD);
 
                     string dirName = Path.GetFileNameWithoutExtension(FILE_FARC_CHRITM_PROP_MOD);
 
-                    ItmTbl itm_tbl = new ItmTbl(mod);
+                    mod.Itm_Tbl.Add("MIK", Mod.GetCharaTbl(mod, ChritmPropLogic.FILE_TXT_ITEM_TABLE_MIK));
+                    mod.Itm_Tbl.Add("RIN", Mod.GetCharaTbl(mod, ChritmPropLogic.FILE_TXT_ITEM_TABLE_RIN));
+                    mod.Itm_Tbl.Add("LEN", Mod.GetCharaTbl(mod, ChritmPropLogic.FILE_TXT_ITEM_TABLE_LEN));
+                    mod.Itm_Tbl.Add("LUK", Mod.GetCharaTbl(mod, ChritmPropLogic.FILE_TXT_ITEM_TABLE_LUK));
+                    mod.Itm_Tbl.Add("MEI", Mod.GetCharaTbl(mod, ChritmPropLogic.FILE_TXT_ITEM_TABLE_MEI));
+                    mod.Itm_Tbl.Add("KAI", Mod.GetCharaTbl(mod, ChritmPropLogic.FILE_TXT_ITEM_TABLE_KAI));
+                    mod.Itm_Tbl.Add("HAK", Mod.GetCharaTbl(mod, ChritmPropLogic.FILE_TXT_ITEM_TABLE_HAK));
+                    mod.Itm_Tbl.Add("TET", Mod.GetCharaTbl(mod, ChritmPropLogic.FILE_TXT_ITEM_TABLE_TET));
+                    mod.Itm_Tbl.Add("NER", Mod.GetCharaTbl(mod, ChritmPropLogic.FILE_TXT_ITEM_TABLE_NER));
+                    mod.Itm_Tbl.Add("SAK", Mod.GetCharaTbl(mod, ChritmPropLogic.FILE_TXT_ITEM_TABLE_SAK));
 
-                    itm_tbl.itmData.itm_tbl.Add("MIK", ItmData.GetCharaTbl(mod, dirName, ChritmProp.FILE_TXT_ITEM_TABLE_MIK));
-                    itm_tbl.itmData.itm_tbl.Add("RIN", ItmData.GetCharaTbl(mod, dirName, ChritmProp.FILE_TXT_ITEM_TABLE_RIN));
-                    itm_tbl.itmData.itm_tbl.Add("LEN", ItmData.GetCharaTbl(mod, dirName, ChritmProp.FILE_TXT_ITEM_TABLE_LEN));
-                    itm_tbl.itmData.itm_tbl.Add("LUK", ItmData.GetCharaTbl(mod, dirName, ChritmProp.FILE_TXT_ITEM_TABLE_LUK));
-                    itm_tbl.itmData.itm_tbl.Add("MEI", ItmData.GetCharaTbl(mod, dirName, ChritmProp.FILE_TXT_ITEM_TABLE_MEI));
-                    itm_tbl.itmData.itm_tbl.Add("KAI", ItmData.GetCharaTbl(mod, dirName, ChritmProp.FILE_TXT_ITEM_TABLE_KAI));
-                    itm_tbl.itmData.itm_tbl.Add("HAK", ItmData.GetCharaTbl(mod, dirName, ChritmProp.FILE_TXT_ITEM_TABLE_HAK));
-                    itm_tbl.itmData.itm_tbl.Add("TET", ItmData.GetCharaTbl(mod, dirName, ChritmProp.FILE_TXT_ITEM_TABLE_TET));
-                    itm_tbl.itmData.itm_tbl.Add("NER", ItmData.GetCharaTbl(mod, dirName, ChritmProp.FILE_TXT_ITEM_TABLE_NER));
-                    itm_tbl.itmData.itm_tbl.Add("SAK", ItmData.GetCharaTbl(mod, dirName, ChritmProp.FILE_TXT_ITEM_TABLE_SAK));
-
-                    mod.itmTbl = itm_tbl;
-
-                    ChritmProp.Init();
+                    ChritmPropLogic.Init();
                 }
             }
         }
@@ -129,27 +123,29 @@ namespace Module_ID_Overlap_Checker.DIVA
 
         private static string ViewTestChara(string chara_name, Mod mod, string key)
         {
-            if (mod.itmTbl == null)
+            if (mod.Itm_Tbl == null)
             {
                 return null;
             }
 
-            var data = mod.itmTbl.itmData.GetCharaData(chara_name, "item.length");
+            var data = mod.GetCharaData(chara_name, "item.length");
             if (data == null) { return null; }
             int item_length = int.Parse(data);
 
             string s = "";
+
+
             for (int i = 0; i < item_length; i++)
             {
                 var key_name = "item." + i.ToString() + ".name";
                 var key_no = "item." + i.ToString() + ".no";
-                s += string.Join("\t", 
+                s += string.Join("\t",
                     "[" + mod.Name + "]",
                     chara_name,
                     key_name,
-                    mod.itmTbl.itmData.GetCharaData(chara_name, key_name), 
+                    mod.GetCharaData(chara_name, key_name),
                     key_no,
-                    mod.itmTbl.itmData.GetCharaData(chara_name, key_no)
+                    mod.GetCharaData(chara_name, key_no)
                 ) + "\n";
             }
 
