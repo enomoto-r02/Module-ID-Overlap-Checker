@@ -16,6 +16,8 @@ namespace Module_ID_Overlap_Checker
         public List<Item> Name = new();
         public List<Item> Sub_Id = new();
 
+        public List<KeyValuePair<string, int>> Overlap_Cnt;
+
 
         public Result(Mod mod, string chara_name, List<Item> no, List<Item> name, List<Item> sub_id)
         {
@@ -24,27 +26,8 @@ namespace Module_ID_Overlap_Checker
             this.No = no;
             this.Name = name;
             this.Sub_Id = sub_id;
+            this.Overlap_Cnt = new();
         }
-
-        //public string ToString(AppConfig config)
-        //{
-        //    if (this.No.Parameter == null || this.Name.Parameter == null)
-        //    {
-        //        return "";
-        //    }
-
-        //    return string.Join("\t", 
-        //        this.Mod.Name,
-        //        this.Chara_Name,
-        //        this.No.GetParameterStr(), 
-        //        this.No.Value,
-        //        this.Name.GetParameterStr(), 
-        //        this.Name.Value,
-        //        this.Mod.GetArrayStr(config, this.Sub_Id.Value, this.No.Value, Name.Value)
-
-        //        ) + "\n";
-
-        //}
 
         public string ToString(AppConfig config)
         {
