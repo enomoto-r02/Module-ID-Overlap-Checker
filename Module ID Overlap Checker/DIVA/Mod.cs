@@ -1,71 +1,89 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Module_ID_Overlap_Checker.Util;
+using Nett;
+using System.Collections.Generic;
+using System.ComponentModel.Design;
+using System.Linq;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Module_ID_Overlap_Checker.DIVA
 {
     public class Mod
     {
         public string Name { get; set; }
-        public string Folder_Path { get; set; }
+        public string Path { get; set; }
         public int Mod_Priority { get; set; }
         public bool Enabled { get; set; }
 
-        public Dictionary<string, IConfiguration> Itm_Tbl { get; set; }
+        public Dictionary<string, List<ItemTbl>> Item_Tbl { get; set; }
 
         public StrArray StrArray { get; set; }
 
         public Mod(int priority, string name, string enabled, string folder_path)
         {
             this.Mod_Priority = -1;
-            this.Itm_Tbl = new();
             this.Mod_Priority = priority;
             this.Name = name;
+            this.Path = folder_path;
             this.Enabled = bool.Parse(enabled);
-            this.Folder_Path = folder_path;
+            this.Item_Tbl = new();
             this.StrArray = new(this);
         }
 
-        public static IConfigurationRoot GetCharaTbl(Mod mod, string fileTextItemTable)
+        public static List<ItemTbl> GetCharaTbl2(Mod mod, string chara_name, string fileTextItemTable)
         {
-            IConfigurationRoot ret = null;
+            List<ItemTbl> ret = new();
 
             var builder = new ConfigurationBuilder();
-            var dir = "./" + Path.GetFileNameWithoutExtension(ChritmPropLogic.FILE_FARC_CHRITM_PROP_MOD) + "/" + fileTextItemTable;
-            if (File.Exists(dir))
+            var path = "./" + System.IO.Path.GetFileNameWithoutExtension(ChritmPropLogic.FILE_FARC_CHRITM_PROP_MOD) + "/" + fileTextItemTable;
+            if (File.Exists(path))
             {
-                builder.AddIniFile(dir);
-                try
+                foreach (var line in File.ReadAllLines(path))
                 {
-                    ret = builder.Build();
-                }
-                catch (Exception e)
-                {
-                    ToolUtil.ErrorLog("\"" + mod.Name + "\" mod is Failed. \n" + e.Message + "\n" + e.InnerException);
-                    ret = null;
+                    if (string.IsNullOrEmpty(line.Trim()) || line.StartsWith("#"))
+                    {
+                        continue;
+                    }
+                    var foo = line.Split("=")[0].Split(".");
+                    var bar = string.Concat(line.Split("=")[1]);
+                    Item item = new Item(mod, foo, bar);
+                    ItemTbl itemTbl = new(mod);
+                    itemTbl.Items.Add(item);
 
-                    //throw e;
+                    ret.Add(itemTbl);
                 }
             }
 
             return ret;
         }
 
-
-        public string GetCharaData(string chara, string key)
+        public string GetArrayStr(AppConfig config, string value, string str_jp)
         {
-            IConfiguration chara_itm_tbl = null;
+            if (this.StrArray.Str_Array_Toml == null)
+            {
+                return "";
+            }
+
             try
             {
-
-                chara_itm_tbl = Itm_Tbl[chara];
+                var lang_low = config.Config.Lang.ToLower();
+                if (lang_low == "jp")
+                {
+                    return str_jp;
+                }
+                else if(lang_low == "en") 
+                { 
+                    return this.StrArray.Str_Array_Toml.Get<TomlTable>("module").Get(value).ToString();
+                }
+                else
+                {
+                    return this.StrArray.Str_Array_Toml.Get<TomlTable>(config.Config.Lang).Get<TomlTable>("module").Get(value).ToString();
+                }
             }
-            catch (KeyNotFoundException knfe)
+            catch (Exception e)
             {
-                return null;
+                return "";
             }
-
-            if (chara_itm_tbl == null) { return null; }
-            return chara_itm_tbl[key];
         }
     }
 }

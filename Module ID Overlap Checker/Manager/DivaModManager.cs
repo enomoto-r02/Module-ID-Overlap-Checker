@@ -71,40 +71,6 @@ namespace Module_ID_Overlap_Checker.Manager
             this.Mods = mods;
         }
 
-        public void LoadPvData(AppConfig appConfig)
-        {
-            var now_pv_db_priority = 0;
-            var is_create_stage_data = false;
-            for (var i = 0; i < Mods.Count; i++)
-            {
-                if (Mods[i].Enabled)
-                {
-                    //Mods[i].LoadPvDb(this.AddDbAnotherSong, this.Song_no_cnt, now_pv_db_priority);
-                    //if (appConfig.Config.MergePvField)
-                    //{
-                    //    Mods[i].LoadPvField(this.allFieldSong);
-
-                    //}
-                    //if (appConfig.Config.MergeStageData)
-                    //{
-                    //    if (is_create_stage_data == false)
-                    //    {
-                    //        is_create_stage_data = Mods[i].InitStageData(appConfig);
-                    //    }
-                    //    else
-                    //    {
-                    //        Mods[i].LoadStageData(appConfig);
-                    //    }
-                    //}
-                    //if (Mods[i].Db_Priority >= 0)
-                    //{
-                    //    now_pv_db_priority++;
-                    //}
-
-                }
-            }
-        }
-
         public string ToStringMods()
         {
             StringBuilder sb = new();

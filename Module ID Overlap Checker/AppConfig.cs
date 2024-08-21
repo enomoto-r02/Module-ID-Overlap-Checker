@@ -9,6 +9,7 @@ namespace Module_ID_Overlap_Checker
         public static string FILE_INI = "Module ID Overlap Checker.ini";
 
         static AppConfig Instance;
+
         public Config Config { get; set; }
 
         public DivaModManagerConfig DivaModManager { get; set; }

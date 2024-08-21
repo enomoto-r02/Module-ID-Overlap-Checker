@@ -22,7 +22,7 @@ namespace Module_ID_Overlap_Checker.DIVA
         public StrArray(Mod mod)
         {
             this.Mod_Name = mod.Name;
-            this.Mod_Path = mod.Folder_Path;
+            this.Mod_Path = mod.Path;
             this.Load();
         }
 

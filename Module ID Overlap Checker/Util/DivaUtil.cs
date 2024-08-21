@@ -4,7 +4,21 @@ namespace Module_ID_Overlap_Checker.Util
 {
     public class DivaUtil
     {
-        public static readonly Dictionary<string, string> CHARA_STR = new()
+        public static readonly List<string> CHARA_STR = new() {
+
+            "MIK",
+            "RIN",
+            "LEN",
+            "LUK",
+            "MEI",
+            "KAI",
+            "HAK",
+            "NER",
+            "SAK",
+            "TET",
+        };
+
+        public static readonly Dictionary<string, string> CHARA_STR_TBL_JP = new()
         {
             {"MIK", "初音ミク"},
             {"RIN", "鏡音リン"},
@@ -18,7 +32,7 @@ namespace Module_ID_Overlap_Checker.Util
             {"TET", "重音テト"},
         };
 
-        public static readonly Dictionary<string, string> CHARA_STR_EN = new()
+        public static readonly Dictionary<string, string> CHARA_STR_TBL_EN = new()
         {
             {"MIK", "Miku"},
             {"RIN", "Rin"},
@@ -32,12 +46,26 @@ namespace Module_ID_Overlap_Checker.Util
             {"TET", "Teto"},
         };
 
+        public static readonly Dictionary<string, string> CHARA_ITM_TBL = new()
+        {
+            {"MIK", "mikitm_tbl.txt"},
+            {"RIN", "rinitm_tbl.txt"},
+            {"LEN", "lenitm_tbl.txt"},
+            {"LUK", "lukitm_tbl.txt"},
+            {"MEI", "meiitm_tbl.txt"},
+            {"KAI", "kaiitm_tbl.txt"},
+            {"HAK", "hakitm_tbl.txt"},
+            {"NER", "tetitm_tbl.txt"},
+            {"SAK", "neritm_tbl.txt"},
+            {"TET", "sakitm_tbl.txt"},
+        };
+
         public static string GetChara(string target)
         {
             var ret = "";
             try
             {
-                ret = CHARA_STR[target];
+                ret = CHARA_STR_TBL_JP[target];
             }
             catch (KeyNotFoundException)
             {
@@ -52,7 +80,7 @@ namespace Module_ID_Overlap_Checker.Util
             var ret = "";
             try
             {
-                ret = CHARA_STR_EN[target];
+                ret = CHARA_STR_TBL_EN[target];
             }
             catch (KeyNotFoundException)
             {

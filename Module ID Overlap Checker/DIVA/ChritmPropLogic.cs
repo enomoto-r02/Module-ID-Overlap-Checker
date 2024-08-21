@@ -1,8 +1,10 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Module_ID_Overlap_Checker.Manager;
 using Module_ID_Overlap_Checker.Util;
+using System;
 using System.Diagnostics;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Module_ID_Overlap_Checker.DIVA
 {
@@ -69,88 +71,98 @@ namespace Module_ID_Overlap_Checker.DIVA
         {
             foreach(var mod in dmm.Mods)
             {
-                if (File.Exists(mod.Folder_Path +"/rom/"+ ChritmPropLogic.FILE_FARC_CHRITM_PROP_MOD))
+                if (File.Exists(mod.Path +"/rom/"+ ChritmPropLogic.FILE_FARC_CHRITM_PROP_MOD))
                 {
-                    File.Copy(mod.Folder_Path + "/rom/" + ChritmPropLogic.FILE_FARC_CHRITM_PROP_MOD, ChritmPropLogic.FILE_FARC_CHRITM_PROP_MOD, true);
+                    File.Copy(mod.Path + "/rom/" + ChritmPropLogic.FILE_FARC_CHRITM_PROP_MOD, ChritmPropLogic.FILE_FARC_CHRITM_PROP_MOD, true);
                     ToolUtil.ExecFarcPack(appConfig, ChritmPropLogic.FILE_FARC_CHRITM_PROP_MOD);
 
                     string dirName = Path.GetFileNameWithoutExtension(FILE_FARC_CHRITM_PROP_MOD);
 
-                    mod.Itm_Tbl.Add("MIK", Mod.GetCharaTbl(mod, ChritmPropLogic.FILE_TXT_ITEM_TABLE_MIK));
-                    mod.Itm_Tbl.Add("RIN", Mod.GetCharaTbl(mod, ChritmPropLogic.FILE_TXT_ITEM_TABLE_RIN));
-                    mod.Itm_Tbl.Add("LEN", Mod.GetCharaTbl(mod, ChritmPropLogic.FILE_TXT_ITEM_TABLE_LEN));
-                    mod.Itm_Tbl.Add("LUK", Mod.GetCharaTbl(mod, ChritmPropLogic.FILE_TXT_ITEM_TABLE_LUK));
-                    mod.Itm_Tbl.Add("MEI", Mod.GetCharaTbl(mod, ChritmPropLogic.FILE_TXT_ITEM_TABLE_MEI));
-                    mod.Itm_Tbl.Add("KAI", Mod.GetCharaTbl(mod, ChritmPropLogic.FILE_TXT_ITEM_TABLE_KAI));
-                    mod.Itm_Tbl.Add("HAK", Mod.GetCharaTbl(mod, ChritmPropLogic.FILE_TXT_ITEM_TABLE_HAK));
-                    mod.Itm_Tbl.Add("TET", Mod.GetCharaTbl(mod, ChritmPropLogic.FILE_TXT_ITEM_TABLE_TET));
-                    mod.Itm_Tbl.Add("NER", Mod.GetCharaTbl(mod, ChritmPropLogic.FILE_TXT_ITEM_TABLE_NER));
-                    mod.Itm_Tbl.Add("SAK", Mod.GetCharaTbl(mod, ChritmPropLogic.FILE_TXT_ITEM_TABLE_SAK));
+                    mod.Item_Tbl.Add("MIK", Mod.GetCharaTbl2(mod, "MIK", ChritmPropLogic.FILE_TXT_ITEM_TABLE_MIK));
+                    mod.Item_Tbl.Add("RIN", Mod.GetCharaTbl2(mod, "RIN", ChritmPropLogic.FILE_TXT_ITEM_TABLE_RIN));
+                    mod.Item_Tbl.Add("LEN", Mod.GetCharaTbl2(mod, "LEN", ChritmPropLogic.FILE_TXT_ITEM_TABLE_LEN));
+                    mod.Item_Tbl.Add("LUK", Mod.GetCharaTbl2(mod, "LUK", ChritmPropLogic.FILE_TXT_ITEM_TABLE_LUK));
+                    mod.Item_Tbl.Add("MEI", Mod.GetCharaTbl2(mod, "MEI", ChritmPropLogic.FILE_TXT_ITEM_TABLE_MEI));
+                    mod.Item_Tbl.Add("KAI", Mod.GetCharaTbl2(mod, "KAI", ChritmPropLogic.FILE_TXT_ITEM_TABLE_KAI));
+                    mod.Item_Tbl.Add("HAK", Mod.GetCharaTbl2(mod, "HAK", ChritmPropLogic.FILE_TXT_ITEM_TABLE_HAK));
+                    mod.Item_Tbl.Add("TET", Mod.GetCharaTbl2(mod, "TET", ChritmPropLogic.FILE_TXT_ITEM_TABLE_TET));
+                    mod.Item_Tbl.Add("NER", Mod.GetCharaTbl2(mod, "NER", ChritmPropLogic.FILE_TXT_ITEM_TABLE_NER));
+                    mod.Item_Tbl.Add("SAK", Mod.GetCharaTbl2(mod, "SAK", ChritmPropLogic.FILE_TXT_ITEM_TABLE_SAK));
 
                     ChritmPropLogic.Init();
                 }
             }
         }
 
-        public static void ViewTest(DivaModManager dmm)
+        public static void ViewTest(AppConfig config, DivaModManager dmm)
         {
             StringBuilder sb = new();
-            sb.Append("mod\tchara\tkey_name\titem\tkey_no\tvalue\n");      // header
+            sb.Append("mod\tchara\tkey_name\titem\tkey_no\tvalue\tLang("+config.Config.Lang+")\n");      // header
 
             foreach (var mod in dmm.Mods)
             {
-                sb.AppendLine(ViewTestChara("MIK", mod, FILE_TXT_ITEM_TABLE_MIK));
-                sb.AppendLine(ViewTestChara("RIN", mod, FILE_TXT_ITEM_TABLE_RIN));
-                sb.AppendLine(ViewTestChara("LEN", mod, FILE_TXT_ITEM_TABLE_LEN));
-                sb.AppendLine(ViewTestChara("LUK", mod, FILE_TXT_ITEM_TABLE_LUK));
-                sb.AppendLine(ViewTestChara("MEI", mod, FILE_TXT_ITEM_TABLE_MEI));
-                sb.AppendLine(ViewTestChara("KAI", mod, FILE_TXT_ITEM_TABLE_KAI));
-                sb.AppendLine(ViewTestChara("HAK", mod, FILE_TXT_ITEM_TABLE_HAK));
-                sb.AppendLine(ViewTestChara("TET", mod, FILE_TXT_ITEM_TABLE_TET));
-                sb.AppendLine(ViewTestChara("NER", mod, FILE_TXT_ITEM_TABLE_NER));
-                sb.AppendLine(ViewTestChara("SAK", mod, FILE_TXT_ITEM_TABLE_SAK));
+                foreach (var chara_key in DivaUtil.CHARA_ITM_TBL.Keys)
+                {
+                    sb.Append(ViewTestChara(config, chara_key, mod, DivaUtil.CHARA_ITM_TBL[chara_key]));
+                }
             }
 
             StringBuilder sb_out = new();
-            foreach(var line in sb.ToString().Split("\n"))
+            foreach(var line in sb.ToString().Split("\r\n"))
             {
                 if (string.IsNullOrEmpty(line.Trim())) continue;
-                sb_out.AppendLine(line);
+                sb_out.Append(line+"\n");
             }
 
             FileUtil.WriteFile_UTF_8_NO_BOM(sb_out.ToString(), "result.txt", false);
         }
 
-        private static string ViewTestChara(string chara_name, Mod mod, string key)
+        private static string ViewTestChara(AppConfig config, string chara_name, Mod mod, string file_name)
         {
-            if (mod.Itm_Tbl == null)
+            if (mod.Item_Tbl == null || mod.Item_Tbl.Count == 0)
             {
                 return null;
             }
 
-            var data = mod.GetCharaData(chara_name, "item.length");
-            if (data == null) { return null; }
-            int item_length = int.Parse(data);
+            StringBuilder sb = new();
 
-            string s = "";
+            Item name = new();
+            Item no= new();
 
+            var chara = "RIN";
 
-            for (int i = 0; i < item_length; i++)
+            if (mod.Item_Tbl[chara].Count == 0)
             {
-                var key_name = "item." + i.ToString() + ".name";
-                var key_no = "item." + i.ToString() + ".no";
-                s += string.Join("\t",
-                    "[" + mod.Name + "]",
-                    chara_name,
-                    key_name,
-                    mod.GetCharaData(chara_name, key_name),
-                    key_no,
-                    mod.GetCharaData(chara_name, key_no)
-                ) + "\n";
+                return null;
             }
 
-            return s;
+            foreach (var item_tbl in mod.Item_Tbl[chara])
+            {
+                foreach (var item in item_tbl.Items)
+                {
+                    if (item.Parameter.Length == 3 && item.Parameter[2] == "name")
+                    {
+                        name.Parameter = item.Parameter;
+                        name.Value = item.Value;
+                    }
+                }
+            }
+            foreach (var item_tbl in mod.Item_Tbl[chara])
+            {
+                foreach (var item in item_tbl.Items)
+                {
+                    if (item.Parameter.Length == 3 && item.Parameter[2] == "no")
+                    {
+                        no.Parameter = item.Parameter;
+                        no.Value = item.Value;
+                    }
+                }
+            }
 
+            Result result = new(mod, chara_name, no, name);
+            sb.Append(result.ToString(config));
+
+            return sb.ToString();
         }
     }
 }

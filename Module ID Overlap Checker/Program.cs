@@ -63,7 +63,7 @@ namespace Module_ID_Overlap_Checker
 
             ChritmPropLogic.Load(appConfig, dmm);
 
-            ChritmPropLogic.ViewTest(dmm);
+            ChritmPropLogic.ViewTest(appConfig, dmm);
 
 
 
