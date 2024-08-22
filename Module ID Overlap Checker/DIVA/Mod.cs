@@ -14,6 +14,9 @@ namespace Module_ID_Overlap_Checker.DIVA
 
         public StrArray StrArray { get; set; }
 
+        public GmModule gmModule { get; set; }
+        public GmModule gmCustomizeModule { get; set; }
+
         public Mod(int priority, string name, string enabled, string folder_path)
         {
             this.Mod_Priority = -1;
@@ -23,14 +26,15 @@ namespace Module_ID_Overlap_Checker.DIVA
             this.Enabled = bool.Parse(enabled);
             this.Item_Tbl = new();
             this.StrArray = new(this);
+            this.gmModule = new(this);
+            this.gmCustomizeModule = new(this);
         }
 
         public static List<ItemTbl> GetCharaTbl(Mod mod, string chara_name, string fileTextItemTable)
         {
             List<ItemTbl> ret = new();
 
-            var builder = new ConfigurationBuilder();
-            var path = "./" + System.IO.Path.GetFileNameWithoutExtension(ChritmPropLogic.FILE_FARC_CHRITM_PROP_MOD) + "/" + fileTextItemTable;
+            var path = "./" + System.IO.Path.GetFileNameWithoutExtension(ModLogic.FILE_FARC_CHRITM_PROP_MOD) + "/" + fileTextItemTable;
             if (File.Exists(path))
             {
                 foreach (var line in File.ReadAllLines(path))
@@ -54,7 +58,7 @@ namespace Module_ID_Overlap_Checker.DIVA
 
         public string GetArrayStr(AppConfig config, string sub_id, string value, string str_jp)
         {
-            if (this.StrArray.Str_Array_Toml == null)
+            if (this.StrArray.Str_Array_Toml == null || value == null)
             {
                 return "";
             }
@@ -81,6 +85,11 @@ namespace Module_ID_Overlap_Checker.DIVA
             {
                 return "";
             }
+        }
+
+        public void GmModuleTblLoad()
+        {
+            this.gmModule.Load();
         }
     }
 }

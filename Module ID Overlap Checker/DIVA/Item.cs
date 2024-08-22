@@ -2,11 +2,10 @@
 {
     public class Item
     {
-        public string Mod_Name { get; set; }
-        public string Mod_Path { get; set; }
+        public Mod Mod { get; set; }
 
         public string[] Parameter { get; set; }
-
+        public string Value { get; set; }
 
         public string GetParameterStr()
         {
@@ -17,18 +16,28 @@
             return string.Join(".", Parameter);
         }
 
-        public string Value { get; set; }
-
         public Item()
         {
         }
 
         public Item(Mod mod, string[] parameter, string value)
         {
-            this.Mod_Name = mod.Name;
-            this.Mod_Path = mod.Path;
+            this.Mod = mod;
             this.Parameter = parameter;
             this.Value = value;
+        }
+
+        public string GetItemValue(string key)
+        {
+            string ret = null;
+
+            var param_key = string.Join(".", this.Parameter);
+            if (key == param_key)
+            {
+                ret = Value;
+            };
+
+            return ret;
         }
     }
 }

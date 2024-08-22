@@ -7,7 +7,7 @@ namespace Module_ID_Overlap_Checker
 {
     class Program
     {
-        static readonly AppConfig appConfig = AppConfig.Get();
+        public static readonly AppConfig appConfig = AppConfig.Get();
         public static readonly string start_dt = DateTime.Now.ToString("yyyyMMdd_HHmmss");
 
         static void Main(string[] args)
@@ -42,7 +42,7 @@ namespace Module_ID_Overlap_Checker
                     return;
                 }
 
-                if (ChritmPropLogic.Init() == false)
+                if (ModLogic.Init() == false)
                 {
                     Console.WriteLine(ToolUtil.CONSOLE_PREFIX + "ChritmProp.Init() is Failed.");
                     Console.WriteLine(ToolUtil.CONSOLE_PREFIX + "Tool Failed.");
@@ -60,13 +60,13 @@ namespace Module_ID_Overlap_Checker
 
                 Console.WriteLine(dmm.ToStringMods());
 
-                ChritmPropLogic.Load(appConfig, dmm);
+                ModLogic.Load(appConfig, dmm);
 
-                ChritmPropLogic.ViewChara(appConfig, dmm);
+                ModLogic.ViewChara(appConfig, dmm);
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Unexpected error. Check the log file.");
+                Console.WriteLine(ToolUtil.CONSOLE_PREFIX + "Unexpected error. Check the log file.");
                 ToolUtil.ErrorLog("Unexpected error. Check the log file.\n" + ex.InnerException + "\n" + ex.Message + "\n" + ex.StackTrace);
             }
             finally

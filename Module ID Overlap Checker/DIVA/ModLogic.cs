@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Module_ID_Overlap_Checker.DIVA
 {
-    internal class ChritmPropLogic
+    internal class ModLogic
     {
         public static readonly string DIR_CHRITM_PROP = "chritm_prop";
         public static readonly string FILE_FARC_CHRITM_PROP = "chritm_prop.farc";
@@ -15,33 +15,27 @@ namespace Module_ID_Overlap_Checker.DIVA
         public static bool Init()
         {
             bool ret = false;
-            try
+
+            string dirName = Path.GetFileNameWithoutExtension(FILE_FARC_CHRITM_PROP_MOD);
+
+            FileUtil.Delete(ModLogic.FILE_FARC_CHRITM_PROP);
+            FileUtil.Delete(ModLogic.FILE_FARC_CHRITM_PROP_MOD);
+            FileUtil.Delete(ModLogic.FILE_FARC_CHRITM_PROP_MDATA);
+            FileUtil.Delete(ToolUtil.FILE_RESULT);
+            FileUtil.Delete(ToolUtil.FILE_LOG);
+
+            foreach (var key in DivaUtil.CHARA_ITM_TBL.Keys)
             {
-                string dirName = Path.GetFileNameWithoutExtension(FILE_FARC_CHRITM_PROP_MOD);
-
-                FileUtil.Delete(ChritmPropLogic.FILE_FARC_CHRITM_PROP);
-                FileUtil.Delete(ChritmPropLogic.FILE_FARC_CHRITM_PROP_MOD);
-                FileUtil.Delete(ChritmPropLogic.FILE_FARC_CHRITM_PROP_MDATA);
-
-                foreach (var key in DivaUtil.CHARA_ITM_TBL.Keys)
-                {
-                    FileUtil.Delete(dirName + "/" + DivaUtil.CHARA_ITM_TBL[key]);
-                }
-
-                // フォルダが空なら削除
-                if (Directory.Exists(dirName) && Directory.EnumerateFileSystemEntries(dirName).Any() == false)
-                {
-                    Directory.Delete(dirName);
-                }
-
-                ret = true;
+                FileUtil.Delete(dirName + "/" + DivaUtil.CHARA_ITM_TBL[key]);
             }
-            catch (Exception e)
+
+            // フォルダが空なら削除
+            if (Directory.Exists(dirName) && Directory.EnumerateFileSystemEntries(dirName).Any() == false)
             {
-                Console.WriteLine(ToolUtil.CONSOLE_PREFIX + "ChritmProp#Init is Failed");
-                ToolUtil.ErrorLog(ToolUtil.CONSOLE_PREFIX + "ChritmProp#Init is Failed");
-                throw e;
+                Directory.Delete(dirName);
             }
+
+            ret = true;
 
             return ret;
         }
@@ -50,10 +44,10 @@ namespace Module_ID_Overlap_Checker.DIVA
         {
             foreach (var mod in dmm.Mods)
             {
-                if (File.Exists(mod.Path + "/rom/" + ChritmPropLogic.FILE_FARC_CHRITM_PROP_MOD))
+                if (File.Exists(mod.Path + "/rom/" + ModLogic.FILE_FARC_CHRITM_PROP_MOD))
                 {
-                    File.Copy(mod.Path + "/rom/" + ChritmPropLogic.FILE_FARC_CHRITM_PROP_MOD, ChritmPropLogic.FILE_FARC_CHRITM_PROP_MOD, true);
-                    ToolUtil.ExecFarcPack(appConfig, ChritmPropLogic.FILE_FARC_CHRITM_PROP_MOD);
+                    File.Copy(mod.Path + "/rom/" + ModLogic.FILE_FARC_CHRITM_PROP_MOD, ModLogic.FILE_FARC_CHRITM_PROP_MOD, true);
+                    ToolUtil.ExecFarcPack(appConfig, ModLogic.FILE_FARC_CHRITM_PROP_MOD);
 
                     string dirName = Path.GetFileNameWithoutExtension(FILE_FARC_CHRITM_PROP_MOD);
 
@@ -62,15 +56,18 @@ namespace Module_ID_Overlap_Checker.DIVA
                         mod.Item_Tbl.Add(chara_key, Mod.GetCharaTbl(mod, chara_key, DivaUtil.CHARA_ITM_TBL[chara_key]));
                     }
 
-                    ChritmPropLogic.Init();
+                    ModLogic.Init();
                 }
+
+                mod.GmModuleTblLoad();
+
             }
         }
 
         public static void ViewChara(AppConfig config, DivaModManager dmm)
         {
             StringBuilder sb = new();
-            sb.Append("mod\tchara\tkey_name\titem\tkey_no\tvalue\tLang(" + config.Config.Lang + ")\n");      // header
+            sb.Append(string.Join("\t", "Mod Name", "Chara", "Item No(itm_tbl)", "Item No Value", "Item Name(itm_tbl)", "Item Name Value", "Name Lang(" + config.Config.Lang + ")")+"\n");      // header
 
             foreach (var mod in dmm.Mods)
             {
@@ -87,7 +84,7 @@ namespace Module_ID_Overlap_Checker.DIVA
                 sb_out.Append(line + "\n");
             }
 
-            FileUtil.WriteFile_UTF_8_NO_BOM(sb_out.ToString(), "result.txt", false);
+            FileUtil.WriteFile_UTF_8_NO_BOM(sb_out.ToString(), ToolUtil.FILE_RESULT, false);
         }
 
         private static string ViewCharaItems(AppConfig config, string chara_name, Mod mod, string file_name)
@@ -110,7 +107,7 @@ namespace Module_ID_Overlap_Checker.DIVA
             {
                 foreach (var item in item_tbl.Items)
                 {
-                    if (item.Parameter.Length == 3 && item.Parameter[2] == "name")
+                    if (item.Parameter.Length == 3 && item.Parameter[0] == "item" && item.Parameter[2] == "name")
                     {
                         Item name = new Item();
                         name.Parameter = item.Parameter;
@@ -125,7 +122,7 @@ namespace Module_ID_Overlap_Checker.DIVA
             {
                 foreach (var item in item_tbl.Items)
                 {
-                    if (item.Parameter.Length == 3 && item.Parameter[2] == "no")
+                    if (item.Parameter.Length == 3 && item.Parameter[0] == "item" && item.Parameter[2] == "no")
                     {
                         Item no = new();
                         no.Parameter = item.Parameter;
@@ -135,22 +132,37 @@ namespace Module_ID_Overlap_Checker.DIVA
                 }
             }
 
+            List<Item> cos_ids = new();
+            foreach (var item_tbl in mod.Item_Tbl[chara_name])
+            {
+                foreach (var item in item_tbl.Items)
+                {
+                    if (item.Parameter.Length == 4 && item.Parameter[0] == "cos" && item.Parameter[2] == "item")
+                    {
+                        Item id = new();
+                        id.Parameter = item.Parameter;
+                        id.Value = item.Value;
+                        cos_ids.Add(id);
+                    }
+                }
+            }
+
             List<Item> sub_ids = new();
             foreach (var item_tbl in mod.Item_Tbl[chara_name])
             {
                 foreach (var item in item_tbl.Items)
                 {
-                    if (item.Parameter.Length == 3 && item.Parameter[2] == "sub_id")
+                    if (item.Parameter.Length == 3 && item.Parameter[0] == "item" && item.Parameter[2] == "sub_id")
                     {
-                        Item sub_id = new();
-                        sub_id.Parameter = item.Parameter;
-                        sub_id.Value = item.Value;
-                        sub_ids.Add(sub_id);
+                        Item id = new();
+                        id.Parameter = item.Parameter;
+                        id.Value = item.Value;
+                        sub_ids.Add(id);
                     }
                 }
-            }
+            }            
 
-            Result result = new(mod, chara_name, nos, names, sub_ids);
+            Result result = new(mod, chara_name, nos, names, sub_ids, cos_ids);
             sb.Append(result.ToString(config));
 
             return sb.ToString();

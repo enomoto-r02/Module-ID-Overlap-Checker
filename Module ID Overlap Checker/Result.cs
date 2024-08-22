@@ -10,19 +10,17 @@ namespace Module_ID_Overlap_Checker
 
         public List<Item> No = new();
         public List<Item> Name = new();
-        public List<Item> Sub_Id = new();
+        public List<Item> SubId = new();
+        public List<Item> CosId = new();
 
-        public List<KeyValuePair<string, int>> Overlap_Cnt;
-
-
-        public Result(Mod mod, string chara_name, List<Item> no, List<Item> name, List<Item> sub_id)
+        public Result(Mod mod, string chara_name, List<Item> no, List<Item> name, List<Item> sub_id, List<Item> cosId)
         {
             this.Mod = mod;
             this.Chara_Name = chara_name;
             this.No = no;
             this.Name = name;
-            this.Sub_Id = sub_id;
-            this.Overlap_Cnt = new();
+            this.SubId = sub_id;
+            this.CosId = cosId;
         }
 
         public string ToString(AppConfig config)
@@ -36,6 +34,14 @@ namespace Module_ID_Overlap_Checker
                     ;
                 }
 
+                var id = this.Mod.gmModule.GetGmModuleData(config, "module." + No[i].Value +".id", "");
+                string lang_val = "";
+
+                if (this.CosId != null && this.CosId.Count > 0)
+                {
+                    lang_val = this.Mod.GetArrayStr(config, this.SubId[i].Value, this.CosId[i].Value, "");
+                }
+
                 sb.Append(string.Join("\t",
                     this.Mod.Name,
                     this.Chara_Name,
@@ -43,9 +49,8 @@ namespace Module_ID_Overlap_Checker
                     this.No[i].Value,
                     this.Name[i].GetParameterStr(),
                     this.Name[i].Value,
-                    this.Mod.GetArrayStr(config, this.Sub_Id[i].Value, this.No[i].Value, Name[i].Value)
-
-                    ) + "\n");
+                    lang_val
+                ) + "\n");
             }
 
             return sb.ToString();
