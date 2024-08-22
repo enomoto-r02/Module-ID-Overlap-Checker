@@ -1,10 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Module_ID_Overlap_Checker.Util;
 using Nett;
-using System.Collections.Generic;
-using System.ComponentModel.Design;
-using System.Linq;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Module_ID_Overlap_Checker.DIVA
 {
@@ -64,7 +59,7 @@ namespace Module_ID_Overlap_Checker.DIVA
                 return "";
             }
 
-            var type = sub_id == "10" ? "module": "customize";
+            var type = sub_id == "10" ? "module" : "customize";
 
             try
             {
@@ -73,8 +68,8 @@ namespace Module_ID_Overlap_Checker.DIVA
                 {
                     return str_jp;
                 }
-                else if(lang_low == "en") 
-                { 
+                else if (lang_low == "en")
+                {
                     return this.StrArray.Str_Array_Toml.Get<TomlTable>(type).Get(value).ToString();
                 }
                 else

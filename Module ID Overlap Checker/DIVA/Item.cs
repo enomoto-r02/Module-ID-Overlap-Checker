@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Module_ID_Overlap_Checker.DIVA
+﻿namespace Module_ID_Overlap_Checker.DIVA
 {
     public class Item
     {

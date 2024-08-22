@@ -1,6 +1,4 @@
-﻿using System.Collections.ObjectModel;
-
-namespace Module_ID_Overlap_Checker.Util
+﻿namespace Module_ID_Overlap_Checker.Util
 {
     public class DivaUtil
     {

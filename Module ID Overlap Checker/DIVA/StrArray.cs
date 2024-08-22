@@ -1,11 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using Module_ID_Overlap_Checker.Util;
-using Nett;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Nett;
 
 namespace Module_ID_Overlap_Checker.DIVA
 {
@@ -14,7 +7,7 @@ namespace Module_ID_Overlap_Checker.DIVA
         public static readonly string FILE_STR_ARRAY_MOD = "mod_str_array.toml";
         public static readonly string DIR_NAME = "lang2";
 
-        public string Mod_Name {  get; set; }
+        public string Mod_Name { get; set; }
         public string Mod_Path { get; set; }
 
         public TomlTable Str_Array_Toml { get; set; }

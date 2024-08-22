@@ -2,7 +2,6 @@
 using Module_ID_Overlap_Checker.Manager;
 using Module_ID_Overlap_Checker.MikuMikuLibrary;
 using Module_ID_Overlap_Checker.Util;
-using System.Text;
 
 namespace Module_ID_Overlap_Checker
 {
@@ -68,7 +67,7 @@ namespace Module_ID_Overlap_Checker
             catch (Exception ex)
             {
                 Console.WriteLine("Unexpected error. Check the log file.");
-                ToolUtil.ErrorLog("Unexpected error. Check the log file.\n"+ex.InnerException+"\n"+ex.Message+"\n"+ex.StackTrace);
+                ToolUtil.ErrorLog("Unexpected error. Check the log file.\n" + ex.InnerException + "\n" + ex.Message + "\n" + ex.StackTrace);
             }
             finally
             {

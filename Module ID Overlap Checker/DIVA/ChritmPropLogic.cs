@@ -1,10 +1,6 @@
-﻿using Microsoft.Extensions.Configuration;
-using Module_ID_Overlap_Checker.Manager;
+﻿using Module_ID_Overlap_Checker.Manager;
 using Module_ID_Overlap_Checker.Util;
-using System;
-using System.Diagnostics;
 using System.Text;
-using System.Text.RegularExpressions;
 
 namespace Module_ID_Overlap_Checker.DIVA
 {
@@ -52,9 +48,9 @@ namespace Module_ID_Overlap_Checker.DIVA
 
         public static void Load(AppConfig appConfig, DivaModManager dmm)
         {
-            foreach(var mod in dmm.Mods)
+            foreach (var mod in dmm.Mods)
             {
-                if (File.Exists(mod.Path +"/rom/"+ ChritmPropLogic.FILE_FARC_CHRITM_PROP_MOD))
+                if (File.Exists(mod.Path + "/rom/" + ChritmPropLogic.FILE_FARC_CHRITM_PROP_MOD))
                 {
                     File.Copy(mod.Path + "/rom/" + ChritmPropLogic.FILE_FARC_CHRITM_PROP_MOD, ChritmPropLogic.FILE_FARC_CHRITM_PROP_MOD, true);
                     ToolUtil.ExecFarcPack(appConfig, ChritmPropLogic.FILE_FARC_CHRITM_PROP_MOD);
@@ -74,7 +70,7 @@ namespace Module_ID_Overlap_Checker.DIVA
         public static void ViewChara(AppConfig config, DivaModManager dmm)
         {
             StringBuilder sb = new();
-            sb.Append("mod\tchara\tkey_name\titem\tkey_no\tvalue\tLang("+config.Config.Lang+")\n");      // header
+            sb.Append("mod\tchara\tkey_name\titem\tkey_no\tvalue\tLang(" + config.Config.Lang + ")\n");      // header
 
             foreach (var mod in dmm.Mods)
             {
@@ -85,10 +81,10 @@ namespace Module_ID_Overlap_Checker.DIVA
             }
 
             StringBuilder sb_out = new();
-            foreach(var line in sb.ToString().Split("\r\n"))
+            foreach (var line in sb.ToString().Split("\r\n"))
             {
                 if (string.IsNullOrEmpty(line.Trim())) continue;
-                sb_out.Append(line+"\n");
+                sb_out.Append(line + "\n");
             }
 
             FileUtil.WriteFile_UTF_8_NO_BOM(sb_out.ToString(), "result.txt", false);

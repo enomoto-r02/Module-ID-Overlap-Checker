@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Module_ID_Overlap_Checker.DIVA
+﻿namespace Module_ID_Overlap_Checker.DIVA
 {
     public class ItemTbl
     {
@@ -17,7 +11,7 @@ namespace Module_ID_Overlap_Checker.DIVA
         {
         }
 
-        public ItemTbl(Mod mod) 
+        public ItemTbl(Mod mod)
         {
             this.Mod_Name = mod.Name;
             this.Mod_Path = mod.Path;

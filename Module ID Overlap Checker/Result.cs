@@ -1,9 +1,5 @@
 ﻿using Module_ID_Overlap_Checker.DIVA;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Module_ID_Overlap_Checker
 {
@@ -33,7 +29,7 @@ namespace Module_ID_Overlap_Checker
         {
             StringBuilder sb = new StringBuilder();
 
-            for (int i=0; i<this.No.Count; i++)
+            for (int i = 0; i < this.No.Count; i++)
             {
                 if (this.No[i].Parameter == null || this.Name[i].Parameter == null)
                 {
