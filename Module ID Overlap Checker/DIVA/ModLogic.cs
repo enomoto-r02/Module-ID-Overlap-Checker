@@ -44,6 +44,7 @@ namespace Module_ID_Overlap_Checker.DIVA
         {
             foreach (var mod in dmm.Mods)
             {
+                mod.GmModuleTblLoad();
                 if (File.Exists(mod.Path + "/rom/" + ModLogic.FILE_FARC_CHRITM_PROP_MOD))
                 {
                     File.Copy(mod.Path + "/rom/" + ModLogic.FILE_FARC_CHRITM_PROP_MOD, ModLogic.FILE_FARC_CHRITM_PROP_MOD, true);
@@ -59,7 +60,6 @@ namespace Module_ID_Overlap_Checker.DIVA
                     ModLogic.Init();
                 }
 
-                mod.GmModuleTblLoad();
 
             }
         }
@@ -103,17 +103,26 @@ namespace Module_ID_Overlap_Checker.DIVA
 
 
             List<Item> names = new();
-            foreach (var item_tbl in mod.Item_Tbl[chara_name])
+            foreach (var item in mod.gmModule.Gm_Module_ItemTbl.Items)
             {
-                foreach (var item in item_tbl.Items)
+                if (item.Parameter.Length == 3 && item.Parameter[0] == "module" && item.Parameter[2] == "name")
                 {
-                    if (item.Parameter.Length == 3 && item.Parameter[0] == "item" && item.Parameter[2] == "name")
-                    {
-                        Item name = new Item();
-                        name.Parameter = item.Parameter;
-                        name.Value = item.Value;
-                        names.Add(name);
-                    }
+                    Item name = new Item();
+                    name.Parameter = item.Parameter;
+                    name.Value = item.Value;
+                    names.Add(name);
+                }
+            }
+
+            List<Item> customize_names = new();
+            foreach (var item in mod.gmCustomizeModule.Gm_Module_ItemTbl.Items)
+            {
+                if (item.Parameter.Length == 3 && item.Parameter[0] == "cstm_item" && item.Parameter[2] == "name")
+                {
+                    Item name = new Item();
+                    name.Parameter = item.Parameter;
+                    name.Value = item.Value;
+                    customize_names.Add(name);
                 }
             }
 
@@ -160,9 +169,11 @@ namespace Module_ID_Overlap_Checker.DIVA
                         sub_ids.Add(id);
                     }
                 }
-            }            
+            }
 
-            Result result = new(mod, chara_name, nos, names, sub_ids, cos_ids);
+            mod.modDB = new ModDataBase(nos, names, sub_ids, cos_ids, customize_names);
+            Result result = new(mod, chara_name);
+
             sb.Append(result.ToString(config));
 
             return sb.ToString();

@@ -16,6 +16,7 @@ namespace Module_ID_Overlap_Checker.DIVA
 
         public GmModule gmModule { get; set; }
         public GmModule gmCustomizeModule { get; set; }
+        public ModDataBase modDB { get; set; }
 
         public Mod(int priority, string name, string enabled, string folder_path)
         {

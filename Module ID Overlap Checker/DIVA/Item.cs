@@ -11,7 +11,7 @@
         {
             if (this.Parameter == null)
             {
-                return null;
+                return "";
             }
             return string.Join(".", Parameter);
         }
@@ -29,7 +29,7 @@
 
         public string GetItemValue(string key)
         {
-            string ret = null;
+            string ret = "";
 
             var param_key = string.Join(".", this.Parameter);
             if (key == param_key)

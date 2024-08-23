@@ -8,47 +8,62 @@ namespace Module_ID_Overlap_Checker
         public Mod Mod { get; set; }
         public string Chara_Name { get; set; }
 
-        public List<Item> No = new();
-        public List<Item> Name = new();
-        public List<Item> SubId = new();
-        public List<Item> CosId = new();
-
-        public Result(Mod mod, string chara_name, List<Item> no, List<Item> name, List<Item> sub_id, List<Item> cosId)
+        public Result(Mod mod, string chara_name)
         {
             this.Mod = mod;
             this.Chara_Name = chara_name;
-            this.No = no;
-            this.Name = name;
-            this.SubId = sub_id;
-            this.CosId = cosId;
         }
 
         public string ToString(AppConfig config)
         {
             StringBuilder sb = new StringBuilder();
 
-            for (int i = 0; i < this.No.Count; i++)
+            foreach (var module in this.Mod.gmModule.Gm_Module_Item.Items)
             {
-                if (this.No[i].Parameter == null || this.Name[i].Parameter == null)
-                {
-                    ;
+                var no = Mod.modDB.No("item."+module.Parameter[1] + ".no");
+                if (no == null) {
+                    continue;
                 }
 
-                var id = this.Mod.gmModule.GetGmModuleData(config, "module." + No[i].Value +".id", "");
+
+                var id = this.Mod.gmModule.GetGmModuleData(config, "module." + no.Value +".id", "");
+
+                var subid = Mod.modDB.SubId("item." + module.Parameter[1] + ".sub_id");
+                var cosid = Mod.modDB.CosId("cos." + module.Parameter[1] + ".id");
+
+                Item name;
+                if (subid.Value == "10")
+                {
+                    name = Mod.modDB.Name("module." + module.Parameter[1] + ".name");
+                }
+                //else if(subid.Value == "1")
+                //{
+                //    name = Mod.modDB.Customize("cstm_item." + module.Parameter[1] + ".name");
+                //}
+                else
+                {
+                    name = new();
+                }
+
                 string lang_val = "";
-
-                if (this.CosId != null && this.CosId.Count > 0)
+                if (subid != null)
                 {
-                    lang_val = this.Mod.GetArrayStr(config, this.SubId[i].Value, this.CosId[i].Value, "");
+                    lang_val = this.Mod.GetArrayStr(config, subid.Value, module.Value, "");
                 }
+
+
+                //if (this.CosId != null && this.CosId.Count > 0)
+                //{
+                //    lang_val = this.Mod.GetArrayStr(config, this.SubId[i].Value, this.No[i].Value, "");
+                //}
 
                 sb.Append(string.Join("\t",
                     this.Mod.Name,
                     this.Chara_Name,
-                    this.No[i].GetParameterStr(),
-                    this.No[i].Value,
-                    this.Name[i].GetParameterStr(),
-                    this.Name[i].Value,
+                    no.GetParameterStr(),
+                    no.Value,
+                    name.GetParameterStr(),
+                    name.Value,
                     lang_val
                 ) + "\n");
             }
