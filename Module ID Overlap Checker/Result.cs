@@ -22,12 +22,10 @@ namespace Module_ID_Overlap_Checker
 
             int index = -1;
 
-            //foreach (var module in this.Mod.GmModule.Gm_Module_Item.Items)
             foreach (var costbl_cos_id in costbl_cos_ids)
             {
                 index++;
                 // xxxitm_tblからcos.xxxxx.id=cosidの添字を取得
-                //var cosId_id = this.Mod.ModDB.NameByValue(@"module\.\d+\.id", module.Value);
                 var cosId_id = this.Mod.ModDB.GetItemTblByValueRegex(@"cos\.\d+\.id", costbl_cos_id.Value);
                 if (cosId_id.Count == 0)
                 {
@@ -67,9 +65,9 @@ namespace Module_ID_Overlap_Checker
                 }
 
                 // cos.n.id.item数ループ
-                for (int i = 0; i < cos_parts.Count; i++)
+                for (int i = 0; i < int.Parse(cosId_length[0].Value); i++)
                 {
-                    if (cos_parts[i] == null) continue;
+                    if (cosId_length.Count == 0) continue;
 
                     try
                     {
@@ -85,7 +83,7 @@ namespace Module_ID_Overlap_Checker
                             this.Mod.Name,
                             this.Chara_Name,
                             cosId_id[0].Value,      // Module ID
-                            cos_parts[i].Value,     // Item No
+                            cos_parts[0].Value,     // Item No
                             subid.Value,            // Sub ID
                             name.Value,
                             lang_val
