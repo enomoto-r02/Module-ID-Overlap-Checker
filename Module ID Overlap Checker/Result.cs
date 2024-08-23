@@ -18,61 +18,39 @@ namespace Module_ID_Overlap_Checker
         {
             StringBuilder sb = new StringBuilder();
 
-            foreach (var module in this.Mod.gmModule.Gm_Module_Item.Items)
+            foreach (var module in this.Mod.GmModule.Gm_Module_Item.Items)
             {
-
-
-
-                var subid = Mod.modDB.SubId("item." + module.Parameter[1] + ".sub_id");
-                if (subid == null || subid.Value != "10")
+                // xxxitm_tblからcos.xxxxx.id=cosidの添字を取得
+                var cosId_id = this.Mod.ModDB.CosIdByValue(@"cos.\d+.id", module.Value);
+                if (cosId_id.Count == 0)
                 {
                     continue;
                 }
+                // xxxitm_tblからcos.n.id.length=xxxxxを取得
+                var cosId_length = this.Mod.ModDB.CosIdByKey(@"cos." + cosId_id[0].Parameter[1] + ".item.length");
+                List<Item> cos_parts = new List<Item>();
+                for (int i=0; i<int.Parse(cosId_length.Value); i++)
+                {
+                    // xxxitm_tblからcos.n.id.item=xxxxxを取得
+                    cos_parts.Add(this.Mod.ModDB.CosIdByKey(@"cos." + cosId_id[0].Parameter[1] + ".item."+i));
+                }
 
-                var lang_val = this.Mod.GetArrayStr(config, subid.Value, module.Value, "");
-                var name = Mod.modDB.Name("module." + module.Parameter[1] + ".name");
+                // cos.n.id.item数ループ
+                for (int i = 0; i < cos_parts.Count; i++)
+                {
+                    var subid = this.Mod.ModDB.SubIdByKey("item."+i+".sub_id");
+                    var name = this.Mod.ModDB.SubIdByKey("item." + i + ".name");
+                    var lang_val = this.Mod.GetArrayStr(config, subid.Value, module.Value, "");
 
-                //var no = Mod.modDB.No("item."+ module.Parameter[1] + ".no");
-
-
-                //var id = this.Mod.gmModule.GetGmModuleData(config, "module." + no.Value +".id", "");
-
-                //var cosid = Mod.modDB.CosId("cos." + module.Parameter[1] + ".id");
-
-
-                //else if (subid.Value == "1")
-                //{
-                //    name = Mod.modDB.Customize("cstm_item." + module.Parameter[1] + ".name");
-                //}
-                //else
-                //{
-                //    name = new();
-                //}
-
-
-                //if (this.CosId != null && this.CosId.Count > 0)
-                //{
-                //    lang_val = this.Mod.GetArrayStr(config, this.SubId[i].Value, this.No[i].Value, "");
-                //}
-
-                //sb.Append(string.Join("\t",
-                //    this.Mod.Name,
-                //    this.Chara_Name,
-                //    no.GetParameterStr(),
-                //    no.Value,
-                //    name.GetParameterStr(),
-                //    name.Value,
-                //    lang_val
-                //) + "\n");
-
-                sb.Append(string.Join("\t",
-                    this.Mod.Name,
-                    this.Chara_Name,
-                    module.Value,
-                    subid.Value,
-                    name.Value,
-                    lang_val
-                ) + "\n");
+                    sb.Append(string.Join("\t",
+                        this.Mod.Name,
+                        this.Chara_Name,
+                        module.Value,
+                        subid.Value,
+                        name.Value,
+                        lang_val
+                    ) + "\n");
+                }
             }
 
             return sb.ToString();

@@ -111,27 +111,21 @@ namespace Module_ID_Overlap_Checker.DIVA
 
 
             List<Item> names = new();
-            foreach (var item in mod.gmModule.Gm_Module_ItemTbl.Items)
+            foreach (var item in mod.GmModule.Gm_Module_ItemTbl.Items)
             {
-                if (item.Parameter.Length == 3 && item.Parameter[0] == "module" && item.Parameter[2] == "name")
-                {
-                    Item name = new Item();
-                    name.Parameter = item.Parameter;
-                    name.Value = item.Value;
-                    names.Add(name);
-                }
+                Item name = new Item();
+                name.Parameter = item.Parameter;
+                name.Value = item.Value;
+                names.Add(name);
             }
 
             List<Item> customize_names = new();
-            foreach (var item in mod.gmCustomizeModule.Gm_Module_ItemTbl.Items)
+            foreach (var item in mod.GmCustomizeModule.Gm_Module_ItemTbl.Items)
             {
-                if (item.Parameter.Length == 3 && item.Parameter[0] == "cstm_item" && item.Parameter[2] == "name")
-                {
-                    Item name = new Item();
-                    name.Parameter = item.Parameter;
-                    name.Value = item.Value;
-                    customize_names.Add(name);
-                }
+                Item name = new Item();
+                name.Parameter = item.Parameter;
+                name.Value = item.Value;
+                customize_names.Add(name);
             }
 
             List<Item> nos = new();
@@ -139,13 +133,10 @@ namespace Module_ID_Overlap_Checker.DIVA
             {
                 foreach (var item in item_tbl.Items)
                 {
-                    if (item.Parameter.Length == 3 && item.Parameter[0] == "item" && item.Parameter[2] == "no")
-                    {
-                        Item no = new();
-                        no.Parameter = item.Parameter;
-                        no.Value = item.Value;
-                        nos.Add(no);
-                    }
+                    Item no = new();
+                    no.Parameter = item.Parameter;
+                    no.Value = item.Value;
+                    nos.Add(no);
                 }
             }
 
@@ -154,13 +145,10 @@ namespace Module_ID_Overlap_Checker.DIVA
             {
                 foreach (var item in item_tbl.Items)
                 {
-                    if (item.Parameter.Length == 4 && item.Parameter[0] == "cos" && item.Parameter[2] == "item")
-                    {
-                        Item id = new();
-                        id.Parameter = item.Parameter;
-                        id.Value = item.Value;
-                        cos_ids.Add(id);
-                    }
+                    Item id = new();
+                    id.Parameter = item.Parameter;
+                    id.Value = item.Value;
+                    cos_ids.Add(id);
                 }
             }
 
@@ -169,17 +157,14 @@ namespace Module_ID_Overlap_Checker.DIVA
             {
                 foreach (var item in item_tbl.Items)
                 {
-                    if (item.Parameter.Length == 3 && item.Parameter[0] == "item" && item.Parameter[2] == "sub_id")
-                    {
-                        Item id = new();
-                        id.Parameter = item.Parameter;
-                        id.Value = item.Value;
-                        sub_ids.Add(id);
-                    }
+                    Item id = new();
+                    id.Parameter = item.Parameter;
+                    id.Value = item.Value;
+                    sub_ids.Add(id);
                 }
             }
 
-            mod.modDB = new ModDataBase(nos, names, sub_ids, cos_ids, customize_names);
+            mod.ModDB = new ModDataBase(nos, names, sub_ids, cos_ids, customize_names);
             Result result = new(mod, chara_name);
 
             sb.Append(result.ToString(config));

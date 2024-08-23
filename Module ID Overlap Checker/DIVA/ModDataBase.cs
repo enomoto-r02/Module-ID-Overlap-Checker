@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Module_ID_Overlap_Checker.DIVA
@@ -19,14 +20,22 @@ namespace Module_ID_Overlap_Checker.DIVA
             return this.GetItem(key, _Name);
         }
         public List<Item> _SubId { get; private set; }
-        public Item SubId(string key)
+        public Item SubIdByKey(string key)
         {
             return this.GetItem(key, _SubId);
         }
-        public List<Item> _CosId { get; private set; }
-        public Item CosId(string key)
+        public List<Item> SubIdByValue(string key_regex, string value)
+        {
+            return this.GetItemValue(key_regex, value, _SubId);
+        }
+        private List<Item> _CosId;
+        public Item CosIdByKey(string key)
         {
             return this.GetItem(key, _CosId);
+        }
+        public List<Item> CosIdByValue(string key_regex, string value)
+        {
+            return this.GetItemValue(key_regex, value, _CosId);
         }
         public List<Item> _Customize { get; private set; }
         public Item Customize(string key)
@@ -59,6 +68,38 @@ namespace Module_ID_Overlap_Checker.DIVA
             }
 
             return null;
+        }
+
+        public List<Item> GetItemValue(string key_regex, string value, List<Item> DB)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                return null;
+            }
+
+            List<Item> ret = new List<Item>();
+            foreach (var item in DB)
+            {
+                if (string.IsNullOrEmpty(key_regex))
+                {
+                    if (key_regex == item.Value)
+                    {
+                        return ret;
+                    }
+                }
+                else
+                {
+                    if (Regex.IsMatch(item.GetParameterStr(), key_regex))
+                    {
+                        if (value == item.Value)
+                        {
+                            ret.Add(item);
+                        }
+                    }
+                }
+            }
+
+            return ret;
         }
     }
 }

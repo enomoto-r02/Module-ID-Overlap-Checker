@@ -14,9 +14,9 @@ namespace Module_ID_Overlap_Checker.DIVA
 
         public StrArray StrArray { get; set; }
 
-        public GmModule gmModule { get; set; }
-        public GmModule gmCustomizeModule { get; set; }
-        public ModDataBase modDB { get; set; }
+        public GmModule GmModule { get; set; }
+        public GmModule GmCustomizeModule { get; set; }
+        public ModDataBase ModDB { get; set; }
 
         public Mod(int priority, string name, string enabled, string folder_path)
         {
@@ -27,8 +27,8 @@ namespace Module_ID_Overlap_Checker.DIVA
             this.Enabled = bool.Parse(enabled);
             this.Item_Tbl = new();
             this.StrArray = new(this);
-            this.gmModule = new(this);
-            this.gmCustomizeModule = new(this);
+            this.GmModule = new(this);
+            this.GmCustomizeModule = new(this);
         }
 
         public static List<ItemTbl> GetCharaTbl(Mod mod, string chara_name, string fileTextItemTable)
@@ -90,7 +90,7 @@ namespace Module_ID_Overlap_Checker.DIVA
 
         public void GmModuleTblLoad()
         {
-            this.gmModule.Load();
+            this.GmModule.Load();
         }
     }
 }
