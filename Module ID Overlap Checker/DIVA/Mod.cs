@@ -59,12 +59,25 @@ namespace Module_ID_Overlap_Checker.DIVA
 
         public string GetArrayStr(AppConfig config, string sub_id, string value, string str_jp)
         {
-            if (this.StrArray.Str_Array_Toml == null || value == null)
+            if (this.StrArray.Str_Array_Toml == null || sub_id == null || value == null)
             {
                 return "";
             }
 
-            var type = sub_id == "10" ? "module" : "customize";
+            string type = "";
+
+            if (sub_id == "10")
+            {
+                type = "module";
+            }
+            else if (sub_id == "1")
+            {
+                type = "customize";
+            }
+            else
+            {
+                return "";
+            }
 
             try
             {

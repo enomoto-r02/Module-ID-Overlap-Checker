@@ -15,16 +15,20 @@ namespace Module_ID_Overlap_Checker.DIVA
             return this.GetItem(key, _No);
         }
         public List<Item> _Name { get; private set; }
-        public Item Name(string key)
+        public Item NameByKey(string key)
         {
             return this.GetItem(key, _Name);
+        }
+        public List<Item> NameByValue(string key_regex, string value)
+        {
+            return this.GetItemValue(key_regex, value, _Name);
         }
         public List<Item> _SubId { get; private set; }
         public Item SubIdByKey(string key)
         {
             return this.GetItem(key, _SubId);
         }
-        public List<Item> SubIdByValue(string key_regex, string value)
+        public List<Item> SubIdByValueRegex(string key_regex, string value)
         {
             return this.GetItemValue(key_regex, value, _SubId);
         }
@@ -33,7 +37,11 @@ namespace Module_ID_Overlap_Checker.DIVA
         {
             return this.GetItem(key, _CosId);
         }
-        public List<Item> CosIdByValue(string key_regex, string value)
+        public List<Item> CosIdByKeyRegex(string key_regex)
+        {
+            return this.GetItemKey(key_regex, _CosId);
+        }
+        public List<Item> CosIdByValueRegex(string key_regex, string value)
         {
             return this.GetItemValue(key_regex, value, _CosId);
         }
@@ -68,6 +76,25 @@ namespace Module_ID_Overlap_Checker.DIVA
             }
 
             return null;
+        }
+
+        public List<Item> GetItemKey(string key_regex, List<Item> DB)
+        {
+            if (string.IsNullOrEmpty(key_regex))
+            {
+                return null;
+            }
+
+            List<Item> ret = new List<Item>();
+            foreach (var item in DB)
+            {
+                if (Regex.IsMatch(item.GetParameterStr(), key_regex))
+                {
+                    ret.Add(item);
+                }
+            }
+
+            return ret;
         }
 
         public List<Item> GetItemValue(string key_regex, string value, List<Item> DB)

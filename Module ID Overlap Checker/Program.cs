@@ -16,6 +16,8 @@ namespace Module_ID_Overlap_Checker
 
             try
             {
+                Console.WriteLine(ToolUtil.CONSOLE_PREFIX + "Validate...");
+
                 if (appConfig == null)
                 {
                     Console.WriteLine(ToolUtil.CONSOLE_PREFIX + "File \"" + AppConfig.FILE_INI + "\" is Not Found.");
@@ -58,8 +60,9 @@ namespace Module_ID_Overlap_Checker
                     return;
                 }
 
-                Console.WriteLine(dmm.ToStringMods());
+                //Console.WriteLine(dmm.ToStringMods());
 
+                Console.WriteLine(ToolUtil.CONSOLE_PREFIX + "Load...");
                 ModLogic.Load(appConfig, dmm);
 
                 ModLogic.ViewChara(appConfig, dmm);

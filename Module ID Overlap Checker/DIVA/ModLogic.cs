@@ -1,5 +1,6 @@
 ﻿using Module_ID_Overlap_Checker.Manager;
 using Module_ID_Overlap_Checker.Util;
+using System.Reflection.Metadata.Ecma335;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
@@ -68,17 +69,22 @@ namespace Module_ID_Overlap_Checker.DIVA
         public static void ViewChara(AppConfig config, DivaModManager dmm)
         {
             StringBuilder sb = new();
-            sb.Append(string.Join("\t", 
-                "Mod Name", 
+
+            // header
+            sb.Append(string.Join("\t",
+                "Mod Name",
                 "Chara",
                 "Module ID",
-                "Sub ID", 
+                "Item No",
+                "Sub ID",
                 "Module Name",
                 "Module Name(" + config.Config.Lang + ")")
-            +"\n");      // header
+            );
+            sb.Append("\n");
 
             foreach (var mod in dmm.Mods)
             {
+                Console.WriteLine(ToolUtil.CONSOLE_PREFIX + " - "+ mod.Name +" execute...");
                 foreach (var chara_key in DivaUtil.CHARA_ITM_TBL.Keys)
                 {
                     sb.Append(ViewCharaItems(config, chara_key, mod, DivaUtil.CHARA_ITM_TBL[chara_key]));
@@ -111,6 +117,10 @@ namespace Module_ID_Overlap_Checker.DIVA
 
 
             List<Item> names = new();
+            if (mod.GmModule.Gm_Module_ItemTbl == null)
+            {
+                return null;
+            }
             foreach (var item in mod.GmModule.Gm_Module_ItemTbl.Items)
             {
                 Item name = new Item();
