@@ -20,36 +20,34 @@ namespace Module_ID_Overlap_Checker
 
             foreach (var module in this.Mod.gmModule.Gm_Module_Item.Items)
             {
-                var no = Mod.modDB.No("item."+module.Parameter[1] + ".no");
-                if (no == null) {
+
+
+
+                var subid = Mod.modDB.SubId("item." + module.Parameter[1] + ".sub_id");
+                if (subid == null || subid.Value != "10")
+                {
                     continue;
                 }
 
+                var lang_val = this.Mod.GetArrayStr(config, subid.Value, module.Value, "");
+                var name = Mod.modDB.Name("module." + module.Parameter[1] + ".name");
 
-                var id = this.Mod.gmModule.GetGmModuleData(config, "module." + no.Value +".id", "");
+                //var no = Mod.modDB.No("item."+ module.Parameter[1] + ".no");
 
-                var subid = Mod.modDB.SubId("item." + module.Parameter[1] + ".sub_id");
-                var cosid = Mod.modDB.CosId("cos." + module.Parameter[1] + ".id");
 
-                Item name;
-                if (subid.Value == "10")
-                {
-                    name = Mod.modDB.Name("module." + module.Parameter[1] + ".name");
-                }
-                //else if(subid.Value == "1")
+                //var id = this.Mod.gmModule.GetGmModuleData(config, "module." + no.Value +".id", "");
+
+                //var cosid = Mod.modDB.CosId("cos." + module.Parameter[1] + ".id");
+
+
+                //else if (subid.Value == "1")
                 //{
                 //    name = Mod.modDB.Customize("cstm_item." + module.Parameter[1] + ".name");
                 //}
-                else
-                {
-                    name = new();
-                }
-
-                string lang_val = "";
-                if (subid != null)
-                {
-                    lang_val = this.Mod.GetArrayStr(config, subid.Value, module.Value, "");
-                }
+                //else
+                //{
+                //    name = new();
+                //}
 
 
                 //if (this.CosId != null && this.CosId.Count > 0)
@@ -57,12 +55,21 @@ namespace Module_ID_Overlap_Checker
                 //    lang_val = this.Mod.GetArrayStr(config, this.SubId[i].Value, this.No[i].Value, "");
                 //}
 
+                //sb.Append(string.Join("\t",
+                //    this.Mod.Name,
+                //    this.Chara_Name,
+                //    no.GetParameterStr(),
+                //    no.Value,
+                //    name.GetParameterStr(),
+                //    name.Value,
+                //    lang_val
+                //) + "\n");
+
                 sb.Append(string.Join("\t",
                     this.Mod.Name,
                     this.Chara_Name,
-                    no.GetParameterStr(),
-                    no.Value,
-                    name.GetParameterStr(),
+                    module.Value,
+                    subid.Value,
                     name.Value,
                     lang_val
                 ) + "\n");
