@@ -77,8 +77,8 @@ namespace Module_ID_Overlap_Checker.DIVA
                 "Module ID",
                 "Item No",
                 "Sub ID",
-                "Module Name",
-                "Module Name(" + config.Config.Lang + ")")
+                "Item Name",
+                "Item Name(" + config.Config.Lang + ")")
             );
             sb.Append("\n");
 
@@ -116,65 +116,41 @@ namespace Module_ID_Overlap_Checker.DIVA
             }
 
 
-            List<Item> names = new();
+            List<Item> Gm_Module_ItemTbl = new();
             if (mod.GmModule.Gm_Module_ItemTbl == null)
             {
                 return null;
             }
             foreach (var item in mod.GmModule.Gm_Module_ItemTbl.Items)
             {
-                Item name = new Item();
-                name.Parameter = item.Parameter;
-                name.Value = item.Value;
-                names.Add(name);
+                Item tmp = new Item();
+                tmp.Parameter = item.Parameter;
+                tmp.Value = item.Value;
+                Gm_Module_ItemTbl.Add(tmp);
             }
 
-            List<Item> customize_names = new();
+            List<Item> GmCustomizeModule = new();
             foreach (var item in mod.GmCustomizeModule.Gm_Module_ItemTbl.Items)
             {
-                Item name = new Item();
-                name.Parameter = item.Parameter;
-                name.Value = item.Value;
-                customize_names.Add(name);
+                Item tmp = new Item();
+                tmp.Parameter = item.Parameter;
+                tmp.Value = item.Value;
+                GmCustomizeModule.Add(tmp);
             }
 
-            List<Item> nos = new();
+            List<Item> Item_Tbl = new();
             foreach (var item_tbl in mod.Item_Tbl[chara_name])
             {
                 foreach (var item in item_tbl.Items)
                 {
-                    Item no = new();
-                    no.Parameter = item.Parameter;
-                    no.Value = item.Value;
-                    nos.Add(no);
+                    Item tmp = new();
+                    tmp.Parameter = item.Parameter;
+                    tmp.Value = item.Value;
+                    Item_Tbl.Add(tmp);
                 }
             }
 
-            List<Item> cos_ids = new();
-            foreach (var item_tbl in mod.Item_Tbl[chara_name])
-            {
-                foreach (var item in item_tbl.Items)
-                {
-                    Item id = new();
-                    id.Parameter = item.Parameter;
-                    id.Value = item.Value;
-                    cos_ids.Add(id);
-                }
-            }
-
-            List<Item> sub_ids = new();
-            foreach (var item_tbl in mod.Item_Tbl[chara_name])
-            {
-                foreach (var item in item_tbl.Items)
-                {
-                    Item id = new();
-                    id.Parameter = item.Parameter;
-                    id.Value = item.Value;
-                    sub_ids.Add(id);
-                }
-            }
-
-            mod.ModDB = new ModDataBase(nos, names, sub_ids, cos_ids, customize_names);
+            mod.ModDB = new ModDataBase(Item_Tbl, Gm_Module_ItemTbl, GmCustomizeModule);
             Result result = new(mod, chara_name);
 
             sb.Append(result.ToString(config));

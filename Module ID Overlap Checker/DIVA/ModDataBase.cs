@@ -9,58 +9,56 @@ namespace Module_ID_Overlap_Checker.DIVA
 {
     public class ModDataBase
     {
-        private List<Item> _No;
-        public Item No(string key)
+        private List<Item> _Item_Tbl;
+        public Item Item_Tbl(string key)
         {
-            return this.GetItem(key, _No);
+            return this.GetItemKey(key, _Item_Tbl);
         }
-        public List<Item> _Name { get; private set; }
-        public Item NameByKey(string key)
+        public Item GetItemTblByKey(string key)
         {
-            return this.GetItem(key, _Name);
+            return this.GetItemKey(key, _Item_Tbl);
         }
-        public List<Item> NameByValue(string key_regex, string value)
+        public List<Item> GetItemTblByValue(string key, string value)
         {
-            return this.GetItemValue(key_regex, value, _Name);
+            return this.GetItemValue(key, value, _Item_Tbl);
         }
-        public List<Item> _SubId { get; private set; }
-        public Item SubIdByKey(string key)
+        public List<Item> GetItemTblByValueRegex(string key_regex, string value)
         {
-            return this.GetItem(key, _SubId);
-        }
-        public List<Item> SubIdByValueRegex(string key_regex, string value)
-        {
-            return this.GetItemValue(key_regex, value, _SubId);
-        }
-        private List<Item> _CosId;
-        public Item CosIdByKey(string key)
-        {
-            return this.GetItem(key, _CosId);
-        }
-        public List<Item> CosIdByKeyRegex(string key_regex)
-        {
-            return this.GetItemKey(key_regex, _CosId);
-        }
-        public List<Item> CosIdByValueRegex(string key_regex, string value)
-        {
-            return this.GetItemValue(key_regex, value, _CosId);
-        }
-        public List<Item> _Customize { get; private set; }
-        public Item Customize(string key)
-        {
-            return this.GetItem(key, _Customize);
+            return this.GetItemValue(key_regex, value, _Item_Tbl);
         }
 
-        public ModDataBase(List<Item> no, List<Item> name, List<Item> sub_id, List<Item> cosId, List<Item> customize)
+        public List<Item> GetItemTblByRegex(string regex)
         {
-            this._No = no;
-            this._Name = name;
-            this._SubId = sub_id;
-            this._CosId = cosId;
-            this._Customize = customize;
+            return this.GetItemRegex(regex, _Item_Tbl);
+        }
+        public List<Item> _Gm_Module_ItemTbl { get; private set; }
+        public Item GmModuleItemTblByKey(string key)
+        {
+            return this.GetItemKey(key, _Gm_Module_ItemTbl);
+        }
+        public List<Item> GmModuleItemTblByValue(string key_regex, string value)
+        {
+            return this.GetItemValue(key_regex, value, _Gm_Module_ItemTbl);
         }
 
-        public Item GetItem(string key, List<Item> DB)
+        public List<Item> _GmCustomizeModule { get; private set; }
+        public Item GetGmCustomizeModuleByKey(string key)
+        {
+            return this.GetItemKey(key, _GmCustomizeModule);
+        }
+        public List<Item> GetGmCustomizeModuleByValueRegex(string key_regex, string value)
+        {
+            return this.GetItemValue(key_regex, value, _GmCustomizeModule);
+        }
+
+        public ModDataBase(List<Item> Item_Tbl, List<Item> Gm_Module_ItemTbl, List<Item> GmCustomizeModule)
+        {
+            this._Item_Tbl = Item_Tbl;
+            this._Gm_Module_ItemTbl = Gm_Module_ItemTbl;
+            this._GmCustomizeModule = GmCustomizeModule;
+        }
+
+        private Item GetItemKey(string key, List<Item> DB)
         {
             if (string.IsNullOrEmpty(key))
             {
@@ -78,7 +76,7 @@ namespace Module_ID_Overlap_Checker.DIVA
             return null;
         }
 
-        public List<Item> GetItemKey(string key_regex, List<Item> DB)
+        private List<Item> GetItemRegex(string key_regex, List<Item> DB)
         {
             if (string.IsNullOrEmpty(key_regex))
             {
@@ -97,7 +95,7 @@ namespace Module_ID_Overlap_Checker.DIVA
             return ret;
         }
 
-        public List<Item> GetItemValue(string key_regex, string value, List<Item> DB)
+        private List<Item> GetItemValue(string key_regex, string value, List<Item> DB)
         {
             if (string.IsNullOrEmpty(value))
             {
