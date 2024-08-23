@@ -52,17 +52,6 @@ namespace Module_ID_Overlap_Checker
                     continue;
                 }
 
-                //List<Item> item_no = new List<Item>();
-                //for (int i = 0; i < cosId_length.Count; i++)
-                //{
-                //    // xxxitm_tblからcos.n.id.item=xxxxxを取得
-                //    item_no.Add(this.Mod.ModDB.GetItemTblByKey(@"item." + index + ".no"));
-                //}
-                //if (item_no.Count == 0)
-                //{
-                //    continue;
-                //}
-
                 // cos.n.id.item数ループ
                 for (int i = 0; i < int.Parse(cosId_length[0].Value); i++)
                 {

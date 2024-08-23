@@ -53,9 +53,9 @@
             {"MEI", "meiitm_tbl.txt"},
             {"KAI", "kaiitm_tbl.txt"},
             {"HAK", "hakitm_tbl.txt"},
-            {"NER", "tetitm_tbl.txt"},
-            {"SAK", "neritm_tbl.txt"},
-            {"TET", "sakitm_tbl.txt"},
+            {"NER", "neritm_tbl.txt"},
+            {"SAK", "sakitm_tbl.txt"},
+            {"TET", "tetitm_tbl.txt"},
         };
 
         public static string GetChara(string target)
