@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using Module_ID_Overlap_Checker.Util;
-using Nett;
+﻿using Module_ID_Overlap_Checker.Util;
 
 namespace Module_ID_Overlap_Checker.DIVA
 {
@@ -95,7 +93,7 @@ namespace Module_ID_Overlap_Checker.DIVA
 
         private void Delete()
         {
-            if(File.Exists(this.ExtractFilePath))
+            if (File.Exists(this.ExtractFilePath))
             {
                 File.Delete(this.ExtractFilePath);
             }

@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using Nett;
+﻿using Nett;
 
 namespace Module_ID_Overlap_Checker.DIVA
 {
@@ -57,11 +56,11 @@ namespace Module_ID_Overlap_Checker.DIVA
             return ret;
         }
 
-        public string GetArrayStr(AppConfig config, string sub_id, string value, string str_jp)
+        public string GetArrayStr(AppConfig config, string sub_id, string module_id, string str_jp)
         {
             string ret = "";
 
-            if (this.StrArray.Str_Array_Toml == null || sub_id == null || value == null)
+            if (this.StrArray.Str_Array_Toml == null || sub_id == null || module_id == null)
             {
                 return "";
             }
@@ -91,9 +90,9 @@ namespace Module_ID_Overlap_Checker.DIVA
             {
                 try
                 {
-                    ret = this.StrArray.Str_Array_Toml.Get<TomlTable>(type).Get(value).ToString();
+                    ret = this.StrArray.Str_Array_Toml.Get<TomlTable>(type).Get(module_id).ToString();
                 }
-                catch(KeyNotFoundException kefe)
+                catch (KeyNotFoundException kefe)
                 {
                     ret = "";
                 }
@@ -101,7 +100,7 @@ namespace Module_ID_Overlap_Checker.DIVA
                 {
                     try
                     {
-                        ret = this.StrArray.Str_Array_Toml.Get<TomlTable>(config.Config.Lang).Get<TomlTable>(type).Get(value).ToString();
+                        ret = this.StrArray.Str_Array_Toml.Get<TomlTable>(config.Config.Lang).Get<TomlTable>(type).Get(module_id).ToString();
                     }
                     catch (KeyNotFoundException kefe)
                     {
@@ -113,7 +112,7 @@ namespace Module_ID_Overlap_Checker.DIVA
                     try
                     {
                         type = "cstm_item";
-                        ret = this.StrArray.Str_Array_Toml.Get<TomlTable>(config.Config.Lang).Get<TomlTable>(type).Get(value).ToString();
+                        ret = this.StrArray.Str_Array_Toml.Get<TomlTable>(config.Config.Lang).Get<TomlTable>(type).Get(module_id).ToString();
                     }
                     catch (KeyNotFoundException kefe)
                     {
@@ -125,7 +124,7 @@ namespace Module_ID_Overlap_Checker.DIVA
             {
                 try
                 {
-                    ret = this.StrArray.Str_Array_Toml.Get<TomlTable>(config.Config.Lang).Get<TomlTable>(type).Get(value).ToString();
+                    ret = this.StrArray.Str_Array_Toml.Get<TomlTable>(config.Config.Lang).Get<TomlTable>(type).Get(module_id).ToString();
                 }
                 catch (KeyNotFoundException kefe)
                 {
@@ -136,7 +135,7 @@ namespace Module_ID_Overlap_Checker.DIVA
                     try
                     {
                         type = "cstm_item";
-                        ret = this.StrArray.Str_Array_Toml.Get<TomlTable>(config.Config.Lang).Get<TomlTable>(type).Get(value).ToString();
+                        ret = this.StrArray.Str_Array_Toml.Get<TomlTable>(config.Config.Lang).Get<TomlTable>(type).Get(module_id).ToString();
                     }
                     catch (KeyNotFoundException kefe)
                     {
