@@ -1,4 +1,5 @@
 ﻿using Module_ID_Overlap_Checker.DIVA;
+using Module_ID_Overlap_Checker.Util;
 using System.Text;
 
 namespace Module_ID_Overlap_Checker
@@ -24,42 +25,51 @@ namespace Module_ID_Overlap_Checker
 
             foreach (var costbl_cos_id in costbl_cos_ids)
             {
+                string key = @"cos.n.id="+costbl_cos_id.Value;
                 var cosId_id = this.Mod.ModDB.GetItemTblByValueRegex(@"cos\.\d+\.id", costbl_cos_id.Value);
                 if (cosId_id.Count == 0)
                 {
+                    ToolUtil.WarnLog("[" + key + "] count is 0 , continue;\n");
                     continue;
                 }
 
-                var cosId_length = this.Mod.ModDB.GetItemTblByRegex(@"cos." + cosId_id[0].Parameter[1] + ".item.length");
+                key = "cos." + cosId_id[0].Parameter[1] + ".item.length";
+                var cosId_length = this.Mod.ModDB.GetItemTblByRegex("cos." + cosId_id[0].Parameter[1] + ".item.length");
                 if (cosId_length.Count == 0)
                 {
+                    ToolUtil.WarnLog("[" + key + "] count is 0 , continue;\n");
                     continue;
                 }
 
                 List<Item> cos_parts = new List<Item>();
                 for (int i=0; i<cosId_length.Count; i++)
                 {
-                    cos_parts.Add(this.Mod.ModDB.GetItemTblByKey(@"cos." + cosId_id[0].Parameter[1] + ".item."+i));
+                    key = "cos." + cosId_id[0].Parameter[1] + ".item." + i;
+                    cos_parts.AddRange(this.Mod.ModDB.GetItemTblByRegex(@"cos\." + cosId_id[0].Parameter[1] + @"\.item.\d+"));
                 }
                 if (cos_parts.Count == 0)
                 {
+                    ToolUtil.WarnLog("[" + key + "] count is 0 , continue;\n");
                     continue;
                 }
 
                 for (int i = 0; i < int.Parse(cosId_length[0].Value); i++)
-                {
-                    if (cosId_length.Count == 0) continue;
-
+                {                    
                     try
                     {
+                        key = @"item.n.no=" + cos_parts[i].Value;
                         var item_index = this.Mod.ModDB.GetItemTblByValueRegex(@"item\.\d+\.no", cos_parts[i].Value);
-                        if (item_index.Count == 0) continue;
-                        var itemno = this.Mod.ModDB.GetItemTblByKey("item." + item_index[0].Parameter[1] + ".no");
-                        if (itemno == null) continue;
-                        var subid = this.Mod.ModDB.GetItemTblByKey("item." + item_index[0].Parameter[1] + ".sub_id");
-                        if (subid == null) continue;
-                        var name = this.Mod.ModDB.GetItemTblByKey("item." + item_index[0].Parameter[1] + ".name");
-                        if (name == null) continue;
+                        Item itemno = null;
+                        Item subid = null;
+                        Item name = null;
+                        if (item_index != null && item_index.Count > 0)
+                        {
+                            itemno = this.Mod.ModDB.GetItemTblByKey("item." + item_index[0].Parameter[1] + ".no");
+                            subid = this.Mod.ModDB.GetItemTblByKey("item." + item_index[0].Parameter[1] + ".sub_id");
+                            name = this.Mod.ModDB.GetItemTblByKey("item." + item_index[0].Parameter[1] + ".name");
+                        }
+
+                        key = @"module.n.id=" + cosId_id[0].Value;
                         var module_id = this.Mod.ModDB.GmModuleItemTblByValue(@"module\.\d+\.id", cosId_id[0].Value);
                         string module_val = "";
                         string lang_val = "";
@@ -72,11 +82,11 @@ namespace Module_ID_Overlap_Checker
                         sb.Append(string.Join("\t",
                             this.Mod.Name,
                             this.Chara_Name,
-                            cosId_id[0].Value,      // Cos ID
-                            module_val,             // Module ID
-                            itemno.Value,           // Item No
-                            subid.Value,            // Sub ID
-                            name.Value,
+                            cosId_id[0].ValueView(),        // Cos ID
+                            module_val,                     // Module ID
+                            itemno.ValueView(),             // Item No
+                            subid.ValueView(),              // Sub ID
+                            name.ValueView(),
                             lang_val
                         ) + "\n");
 
@@ -84,7 +94,8 @@ namespace Module_ID_Overlap_Checker
                     }
                     catch(Exception e)
                     {
-                        ;
+                        ToolUtil.ErrorLog(e.Message + "\n" + e.InnerException + "\n" + e.StackTrace);
+                        continue;
                     }
                 }
             }

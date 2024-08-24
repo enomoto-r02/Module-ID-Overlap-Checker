@@ -6,6 +6,17 @@
 
         public string[] Parameter { get; set; }
         public string Value { get; set; }
+        public string ValueView()
+        {
+            if(this == null || string.IsNullOrEmpty(this.Value))
+            {
+                return "";
+            }
+            else
+            {
+                return this.Value;
+            }
+        }
 
         public string GetParameterStr()
         {
