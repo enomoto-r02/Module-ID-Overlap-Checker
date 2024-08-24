@@ -18,74 +18,44 @@ namespace Module_ID_Overlap_Checker
         {
             StringBuilder sb = new StringBuilder();
 
-            var costbl_cos_ids = this.Mod.ModDB.GetItemTblByRegex(@"cos\.\d+\.id");
+            var item_nos = this.Mod.ModDB.GetItemTblByRegex(@"item\.\d+\.no");
 
-            int index = 0;
-
-            foreach (var costbl_cos_id in costbl_cos_ids)
+            foreach (var item_no in item_nos)
             {
-                var cosId_id = this.Mod.ModDB.GetItemTblByValueRegex(@"cos\.\d+\.id", costbl_cos_id.Value);
-                if (cosId_id.Count == 0)
-                {
-                    continue;
-                }
+                var item_name = this.Mod.ModDB.GetItemTblByKey("item." + item_no.Parameter[1] + ".name");
+                var item_subid = this.Mod.ModDB.GetItemTblByKey("item." + item_no.Parameter[1] + ".sub_id");
 
-                var cosId_length = this.Mod.ModDB.GetItemTblByRegex(@"cos." + cosId_id[0].Parameter[1] + ".item.length");
-                if (cosId_length.Count == 0)
+                var cos_item = this.Mod.ModDB.GetItemTblByValueRegex(@"cos\.\d+\.item\.\d+", item_no.Value);
+                if (cos_item != null && cos_item.Count > 0)
                 {
-                    continue;
-                }
+                    var cos_id = this.Mod.ModDB.GetItemTblByKey("cos." + cos_item[0].Parameter[1] + ".id");
+                    var cos_key = "COS_" + (int.Parse(cos_id.Value) + 1);
+                    var module_cos = this.Mod.ModDB.GetModuleTblByValue(@"module\.\d+\.cos", cos_key);
 
-                List<Item> cos_parts = new List<Item>();
-                for (int i=0; i<cosId_length.Count; i++)
-                {
-                    cos_parts.Add(this.Mod.ModDB.GetItemTblByKey(@"cos." + cosId_id[0].Parameter[1] + ".item."+i));
-                }
-                if (cos_parts.Count == 0)
-                {
-                    continue;
-                }
+                    var module_id_str = "";
+                    var module_lang = "";
 
-                for (int i = 0; i < int.Parse(cosId_length[0].Value); i++)
-                {
-                    if (cosId_length.Count == 0) continue;
-
-                    try
+                    if (module_cos.Count > 0)
                     {
-                        var item_index = this.Mod.ModDB.GetItemTblByValueRegex(@"item\.\d+\.no", cos_parts[i].Value);
-                        if (item_index.Count == 0) continue;
-                        var itemno = this.Mod.ModDB.GetItemTblByKey("item." + item_index[0].Parameter[1] + ".no");
-                        if (itemno == null) continue;
-                        var subid = this.Mod.ModDB.GetItemTblByKey("item." + item_index[0].Parameter[1] + ".sub_id");
-                        if (subid == null) continue;
-                        var name = this.Mod.ModDB.GetItemTblByKey("item." + item_index[0].Parameter[1] + ".name");
-                        if (name == null) continue;
-                        var module_id = this.Mod.ModDB.GmModuleItemTblByValue(@"module\.\d+\.id", cosId_id[0].Value);
-                        string module_val = "";
-                        string lang_val = "";
-                        if (module_id != null && module_id.Count == 1)
-                        {
-                            module_val = module_id[0].Value;
-                            lang_val = this.Mod.GetArrayStr(config, subid.Value, module_id[0].Value, "");
-                        }
-
-                        sb.Append(string.Join("\t",
-                            this.Mod.Name,
-                            this.Chara_Name,
-                            cosId_id[0].Value,      // Cos ID
-                            module_val,             // Module ID
-                            itemno.Value,           // Item No
-                            subid.Value,            // Sub ID
-                            name.Value,
-                            lang_val
-                        ) + "\n");
-
-                        index++;
+                        var module_id = this.Mod.ModDB.GetModuleTblByKey("module." + module_cos[0].Parameter[1] + ".id");
+                        module_id_str = module_id.Value;
+                        module_lang = this.Mod.GetArrayStr(config, item_subid.Value, module_id.Value, "");
                     }
-                    catch(Exception e)
-                    {
-                        ;
-                    }
+
+                    sb.Append(string.Join("\t",
+                        this.Mod.Name,
+                        this.Chara_Name,
+                        cos_id.Value,
+                        module_id_str,
+                        item_no.Value,
+                        item_subid.Value,
+                        item_name.Value,
+                        module_lang
+                    ) + "\n");
+                }
+                else
+                {
+                    //ToolUtil.WarnLog($"{ToolUtil.LOG_PREFIX}[{Mod.Name}]cos.n.item.n={item_no.Value} is not Found.");
                 }
             }
 

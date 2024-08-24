@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace Module_ID_Overlap_Checker.MikuMikuLibrary
+﻿namespace Module_ID_Overlap_Checker.MikuMikuLibrary
 {
     public class MikuMikuLibraryConfig
     {

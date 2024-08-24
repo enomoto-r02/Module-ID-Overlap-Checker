@@ -1,7 +1,5 @@
 ﻿using Module_ID_Overlap_Checker.Manager;
 using Module_ID_Overlap_Checker.Util;
-using System.Reflection.Metadata.Ecma335;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
 namespace Module_ID_Overlap_Checker.DIVA
@@ -85,7 +83,7 @@ namespace Module_ID_Overlap_Checker.DIVA
 
             foreach (var mod in dmm.Mods)
             {
-                Console.WriteLine(ToolUtil.CONSOLE_PREFIX + "- "+ mod.Name +" execute...");
+                Console.WriteLine(ToolUtil.CONSOLE_PREFIX + "- " + mod.Name + " execute...");
                 foreach (var chara_key in DivaUtil.CHARA_ITM_TBL.Keys)
                 {
                     sb.Append(ViewCharaItems(config, chara_key, mod, DivaUtil.CHARA_ITM_TBL[chara_key]));
