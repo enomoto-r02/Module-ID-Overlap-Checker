@@ -80,32 +80,69 @@ namespace Module_ID_Overlap_Checker.DIVA
             {
                 return "";
             }
+            var lang_low = config.Config.Lang.ToLower();
 
-            try
+            if (lang_low == "jp")
             {
-                var lang_low = config.Config.Lang.ToLower();
-
-                if (lang_low == "jp")
-                {
-                    return str_jp;
-                }
-                // 旧フォーマット
-                else if (lang_low == "en")
+                return str_jp;
+            }
+            // 旧フォーマット
+            else if (lang_low == "en")
+            {
+                try
                 {
                     ret = this.StrArray.Str_Array_Toml.Get<TomlTable>(type).Get(value).ToString();
-                    if (string.IsNullOrEmpty(ret))
+                }
+                catch(KeyNotFoundException kefe)
+                {
+                    ret = "";
+                }
+                if (string.IsNullOrEmpty(ret))
+                {
+                    try
                     {
                         ret = this.StrArray.Str_Array_Toml.Get<TomlTable>(config.Config.Lang).Get<TomlTable>(type).Get(value).ToString();
                     }
+                    catch (KeyNotFoundException kefe)
+                    {
+                        ret = "";
+                    }
                 }
-                else
+                if (string.IsNullOrEmpty(ret))
+                {
+                    try
+                    {
+                        type = "cstm_item";
+                        ret = this.StrArray.Str_Array_Toml.Get<TomlTable>(config.Config.Lang).Get<TomlTable>(type).Get(value).ToString();
+                    }
+                    catch (KeyNotFoundException kefe)
+                    {
+                        ret = "";
+                    }
+                }
+            }
+            else
+            {
+                try
                 {
                     ret = this.StrArray.Str_Array_Toml.Get<TomlTable>(config.Config.Lang).Get<TomlTable>(type).Get(value).ToString();
                 }
-            }
-            catch (Exception e)
-            {
-                return "";
+                catch (KeyNotFoundException kefe)
+                {
+                    ret = "";
+                }
+                if (string.IsNullOrEmpty(ret))
+                {
+                    try
+                    {
+                        type = "cstm_item";
+                        ret = this.StrArray.Str_Array_Toml.Get<TomlTable>(config.Config.Lang).Get<TomlTable>(type).Get(value).ToString();
+                    }
+                    catch (KeyNotFoundException kefe)
+                    {
+                        ret = "";
+                    }
+                }
             }
 
             return ret;
