@@ -59,6 +59,8 @@ namespace Module_ID_Overlap_Checker.DIVA
 
         public string GetArrayStr(AppConfig config, string sub_id, string value, string str_jp)
         {
+            string ret = "";
+
             if (this.StrArray.Str_Array_Toml == null || sub_id == null || value == null)
             {
                 return "";
@@ -82,24 +84,31 @@ namespace Module_ID_Overlap_Checker.DIVA
             try
             {
                 var lang_low = config.Config.Lang.ToLower();
+
                 if (lang_low == "jp")
                 {
                     return str_jp;
                 }
                 // 旧フォーマット
-                //else if (lang_low == "en")
-                //{
-                //    return this.StrArray.Str_Array_Toml.Get<TomlTable>(type).Get(value).ToString();
-                //}
+                else if (lang_low == "en")
+                {
+                    ret = this.StrArray.Str_Array_Toml.Get<TomlTable>(type).Get(value).ToString();
+                    if (string.IsNullOrEmpty(ret))
+                    {
+                        ret = this.StrArray.Str_Array_Toml.Get<TomlTable>(config.Config.Lang).Get<TomlTable>(type).Get(value).ToString();
+                    }
+                }
                 else
                 {
-                    return this.StrArray.Str_Array_Toml.Get<TomlTable>(config.Config.Lang).Get<TomlTable>(type).Get(value).ToString();
+                    ret = this.StrArray.Str_Array_Toml.Get<TomlTable>(config.Config.Lang).Get<TomlTable>(type).Get(value).ToString();
                 }
             }
             catch (Exception e)
             {
                 return "";
             }
+
+            return ret;
         }
 
         public void GmModuleTblLoad()
