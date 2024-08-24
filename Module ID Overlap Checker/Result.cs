@@ -60,14 +60,20 @@ namespace Module_ID_Overlap_Checker
                         if (subid == null) continue;
                         var name = this.Mod.ModDB.GetItemTblByKey("item." + item_index[0].Parameter[1] + ".name");
                         if (name == null) continue;
-                        var module_id = this.Mod.ModDB.GmModuleItemTblByKey(@"module." + cosId_id[0].Parameter[1] + ".id");
-                        if (module_id == null) continue;
-                        var lang_val = this.Mod.GetArrayStr(config, subid.Value, cosId_id[0].Value, "");
+                        var module_id = this.Mod.ModDB.GmModuleItemTblByValue(@"module\.\d+\.id", cosId_id[0].Value);
+                        string module_val = "";
+                        string lang_val = "";
+                        if (module_id != null && module_id.Count == 1)
+                        {
+                            module_val = module_id[0].Value;
+                            lang_val = this.Mod.GetArrayStr(config, subid.Value, module_id[0].Value, "");
+                        }
 
                         sb.Append(string.Join("\t",
                             this.Mod.Name,
                             this.Chara_Name,
-                            module_id.Value,        // Module ID
+                            cosId_id[0].Value,      // Cos ID
+                            module_val,             // Module ID
                             itemno.Value,           // Item No
                             subid.Value,            // Sub ID
                             name.Value,

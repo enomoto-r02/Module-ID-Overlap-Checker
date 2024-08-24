@@ -86,10 +86,11 @@ namespace Module_ID_Overlap_Checker.DIVA
                 {
                     return str_jp;
                 }
-                else if (lang_low == "en")
-                {
-                    return this.StrArray.Str_Array_Toml.Get<TomlTable>(type).Get(value).ToString();
-                }
+                // 旧フォーマット
+                //else if (lang_low == "en")
+                //{
+                //    return this.StrArray.Str_Array_Toml.Get<TomlTable>(type).Get(value).ToString();
+                //}
                 else
                 {
                     return this.StrArray.Str_Array_Toml.Get<TomlTable>(config.Config.Lang).Get<TomlTable>(type).Get(value).ToString();
