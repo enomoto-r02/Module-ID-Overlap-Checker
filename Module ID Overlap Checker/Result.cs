@@ -29,7 +29,7 @@ namespace Module_ID_Overlap_Checker
                 var cosId_id = this.Mod.ModDB.GetItemTblByValueRegex(@"cos\.\d+\.id", costbl_cos_id.Value);
                 if (cosId_id.Count == 0)
                 {
-                    ToolUtil.WarnLog("[" + key + "] count is 0 , continue;\n");
+                    ToolUtil.WarnLog("["+Mod.Name+"][" + key + "] count is 0 , continue;\n");
                     continue;
                 }
 
@@ -37,7 +37,7 @@ namespace Module_ID_Overlap_Checker
                 var cosId_length = this.Mod.ModDB.GetItemTblByRegex("cos." + cosId_id[0].Parameter[1] + ".item.length");
                 if (cosId_length.Count == 0)
                 {
-                    ToolUtil.WarnLog("[" + key + "] count is 0 , continue;\n");
+                    ToolUtil.WarnLog("[" + Mod.Name + "][" + key + "] count is 0 , continue;\n");
                     continue;
                 }
 
@@ -49,7 +49,7 @@ namespace Module_ID_Overlap_Checker
                 }
                 if (cos_parts.Count == 0)
                 {
-                    ToolUtil.WarnLog("[" + key + "] count is 0 , continue;\n");
+                    ToolUtil.WarnLog("[" + Mod.Name + "][" + key + "] count is 0 , continue;\n");
                     continue;
                 }
 
@@ -59,21 +59,26 @@ namespace Module_ID_Overlap_Checker
                     {
                         key = @"item.n.no=" + cos_parts[i].Value;
                         var item_index = this.Mod.ModDB.GetItemTblByValueRegex(@"item\.\d+\.no", cos_parts[i].Value);
-                        Item itemno = null;
-                        Item subid = null;
-                        Item name = null;
+                        Item itemno = new();
+                        Item subid = new();
+                        Item name = new();
                         if (item_index != null && item_index.Count > 0)
                         {
                             itemno = this.Mod.ModDB.GetItemTblByKey("item." + item_index[0].Parameter[1] + ".no");
                             subid = this.Mod.ModDB.GetItemTblByKey("item." + item_index[0].Parameter[1] + ".sub_id");
                             name = this.Mod.ModDB.GetItemTblByKey("item." + item_index[0].Parameter[1] + ".name");
                         }
+                        else
+                        {
+                            // 既存コスチュームのIDなど
+                            itemno.Value = cos_parts[i].Value;
+                        }
 
                         key = @"module.n.id=" + cosId_id[0].Value;
                         var module_id = this.Mod.ModDB.GmModuleItemTblByValue(@"module\.\d+\.id", cosId_id[0].Value);
                         string module_val = "";
                         string lang_val = "";
-                        if (module_id != null && module_id.Count == 1)
+                        if (module_id != null && module_id.Count == 1 && subid != null)
                         {
                             module_val = module_id[0].Value;
                             lang_val = this.Mod.GetArrayStr(config, subid.Value, module_id[0].Value, "");
@@ -94,7 +99,7 @@ namespace Module_ID_Overlap_Checker
                     }
                     catch(Exception e)
                     {
-                        ToolUtil.ErrorLog(e.Message + "\n" + e.InnerException + "\n" + e.StackTrace);
+                        ToolUtil.ErrorLog("[" + Mod.Name + "]"+e.Message + "\n" + e.InnerException + "\n" + e.StackTrace);
                         continue;
                     }
                 }

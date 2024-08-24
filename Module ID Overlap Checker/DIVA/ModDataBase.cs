@@ -62,7 +62,7 @@ namespace Module_ID_Overlap_Checker.DIVA
         {
             if (string.IsNullOrEmpty(key))
             {
-                return null;
+                return new();
             }
 
             foreach (var item in DB)
@@ -73,14 +73,14 @@ namespace Module_ID_Overlap_Checker.DIVA
                 }
             }
 
-            return null;
+            return new();
         }
 
         private List<Item> GetItemRegex(string key_regex, List<Item> DB)
         {
             if (string.IsNullOrEmpty(key_regex))
             {
-                return null;
+                return new();
             }
 
             List<Item> ret = new List<Item>();
@@ -99,7 +99,7 @@ namespace Module_ID_Overlap_Checker.DIVA
         {
             if (string.IsNullOrEmpty(value))
             {
-                return null;
+                return new();
             }
 
             List<Item> ret = new List<Item>();
