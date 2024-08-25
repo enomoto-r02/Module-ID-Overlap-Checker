@@ -73,6 +73,7 @@ namespace Module_ID_Overlap_Checker.DIVA
                 "Mod Name",
                 "Chara",
                 "Cos ID",
+                "Module Key",
                 "Module ID",
                 "Item No",
                 "Sub ID",

@@ -15,6 +15,12 @@ namespace Module_ID_Overlap_Checker.DIVA
         // モジュールのみを抜粋したもの
         public ItemTbl Gm_Module_Item { get; set; }
 
+        // DB全体
+        public ItemTbl Gm_CustomizeModule_ItemTbl { get; set; }
+
+        // モジュールのみを抜粋したもの
+        public ItemTbl Gm_Customize_Item { get; set; }
+
         private string ExtractFilePath { get; set; }
         private string ExtractDirectoryPath { get; set; }
 
@@ -23,6 +29,8 @@ namespace Module_ID_Overlap_Checker.DIVA
             this.Mod = mod;
             this.Gm_Module_ItemTbl = new ItemTbl(mod);
             this.Gm_Module_Item = new ItemTbl(mod);
+            this.Gm_CustomizeModule_ItemTbl = new(mod);
+            this.Gm_Customize_Item = new(mod);
         }
 
         public void Load()
@@ -113,6 +121,16 @@ namespace Module_ID_Overlap_Checker.DIVA
             }
 
             return this.Gm_Module_ItemTbl.GetItemValue(key);
+        }
+
+        public Item GetGmModuleByValue(string key_regex, string value)
+        {
+            if (this.Gm_Module_ItemTbl == null)
+            {
+                return new();
+            }
+
+            return this.Gm_Module_ItemTbl.GetItemValueByRegex(key_regex, value);
         }
     }
 }

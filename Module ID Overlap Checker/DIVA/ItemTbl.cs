@@ -1,4 +1,6 @@
-﻿namespace Module_ID_Overlap_Checker.DIVA
+﻿using System.Text.RegularExpressions;
+
+namespace Module_ID_Overlap_Checker.DIVA
 {
     public class ItemTbl
     {
@@ -83,6 +85,19 @@
                 if (!string.IsNullOrEmpty(val))
                 {
                     return val;
+                }
+            }
+
+            return null;
+        }
+
+        public Item GetItemValueByRegex(string key_regex, string value)
+        {
+            foreach (var item in this.Items)
+            {
+                if (Regex.Match(item.ParameterStr(), key_regex).Length > 0 && item.Value == value)
+                {
+                    return item;
                 }
             }
 

@@ -144,7 +144,7 @@ namespace Module_ID_Overlap_Checker.DIVA
                 }
             }
 
-            return ret;
+            return $"{lang_low}.{type}.{ret}";
         }
 
         public void GmModuleTblLoad()
