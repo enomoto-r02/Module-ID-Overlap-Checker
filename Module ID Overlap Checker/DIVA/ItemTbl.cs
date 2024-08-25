@@ -79,29 +79,35 @@ namespace Module_ID_Overlap_Checker.DIVA
 
         public string GetItemValue(string key)
         {
-            foreach (var item in this.Items)
+            if (this.Items != null)
             {
-                var val = item.GetItemValue(key);
-                if (!string.IsNullOrEmpty(val))
+                foreach (var item in this.Items)
                 {
-                    return val;
+                    var val = item.GetItemValue(key);
+                    if (!string.IsNullOrEmpty(val))
+                    {
+                        return val;
+                    }
                 }
             }
 
-            return null;
+            return "";
         }
 
         public Item GetItemValueByRegex(string key_regex, string value)
         {
-            foreach (var item in this.Items)
+            if (this.Items != null)
             {
-                if (Regex.Match(item.ParameterStr(), key_regex).Length > 0 && item.Value == value)
+                foreach (var item in this.Items)
                 {
-                    return item;
+                    if (Regex.Match(item.ParameterStr(), key_regex).Length > 0 && item.Value == value)
+                    {
+                        return item;
+                    }
                 }
             }
 
-            return null;
+            return new();
         }
     }
 }

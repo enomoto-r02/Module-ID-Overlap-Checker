@@ -117,11 +117,11 @@ namespace Module_ID_Overlap_Checker.DIVA
 
 
             List<Item> Gm_Module_ItemTbl = new();
-            if (mod.GmModule.Gm_Module_ItemTbl == null)
+            if (mod.Module.Module_ItemTbl == null)
             {
                 return null;
             }
-            foreach (var item in mod.GmModule.Gm_Module_ItemTbl.Items)
+            foreach (var item in mod.Module.Module_ItemTbl.Items)
             {
                 Item tmp = new Item();
                 tmp.Parameter = item.Parameter;
@@ -130,7 +130,7 @@ namespace Module_ID_Overlap_Checker.DIVA
             }
 
             List<Item> GmCustomizeModule = new();
-            foreach (var item in mod.GmCustomizeModule.Gm_Module_ItemTbl.Items)
+            foreach (var item in mod.CustomizeModule.Module_ItemTbl.Items)
             {
                 Item tmp = new Item();
                 tmp.Parameter = item.Parameter;
