@@ -44,6 +44,7 @@ namespace Module_ID_Overlap_Checker.DIVA
         {
             foreach (var mod in dmm.Mods)
             {
+                Console.WriteLine($"{ToolUtil.CONSOLE_PREFIX}[Load] {mod.Name} Loading.");
                 mod.GmModuleTblLoad();
                 if (File.Exists(mod.Path + "/rom/" + ModLogic.FILE_FARC_CHRITM_PROP_MOD))
                 {
@@ -84,7 +85,7 @@ namespace Module_ID_Overlap_Checker.DIVA
 
             foreach (var mod in dmm.Mods)
             {
-                Console.WriteLine(ToolUtil.CONSOLE_PREFIX + "- " + mod.Name + " execute...");
+                Console.WriteLine($"{ToolUtil.CONSOLE_PREFIX}[Execute] {mod.Name} Execute.");
                 foreach (var chara_key in DivaUtil.CHARA_ITM_TBL.Keys)
                 {
                     sb.Append(ViewCharaItems(config, chara_key, mod, DivaUtil.CHARA_ITM_TBL[chara_key]));

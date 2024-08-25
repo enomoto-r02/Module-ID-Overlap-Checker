@@ -53,7 +53,14 @@ namespace Module_ID_Overlap_Checker.Manager
             {
                 Mod mod = new Mod(i, mod_name, mod_enabled, mod_folder);
 
-                if (mod.Enabled)
+                if (Config.Config.ModCheckedOn == true)
+                {
+                    if (mod.Enabled)
+                    {
+                        mods.Add(mod);
+                    }
+                }
+                else
                 {
                     mods.Add(mod);
                 }

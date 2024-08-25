@@ -12,11 +12,11 @@ namespace Module_ID_Overlap_Checker
 
         static void Main(string[] args)
         {
-            Console.WriteLine(ToolUtil.CONSOLE_PREFIX + "Tool Start.");
+            Console.WriteLine(ToolUtil.CONSOLE_PREFIX + "Tool Start."); 
 
             try
             {
-                Console.WriteLine(ToolUtil.CONSOLE_PREFIX + "Validate...");
+                Console.WriteLine($"{ToolUtil.CONSOLE_PREFIX}Validate...");
 
                 if (appConfig == null)
                 {
@@ -62,7 +62,6 @@ namespace Module_ID_Overlap_Checker
 
                 //Console.WriteLine(dmm.ToStringMods());
 
-                Console.WriteLine(ToolUtil.CONSOLE_PREFIX + "Load...");
                 ModLogic.Load(appConfig, dmm);
 
                 ModLogic.ViewChara(appConfig, dmm);
