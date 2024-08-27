@@ -2,6 +2,7 @@
 {
     public class Config
     {
+        public bool ModCheckedOnly { get; set; }
         public string Lang { get; set; }
     }
 }

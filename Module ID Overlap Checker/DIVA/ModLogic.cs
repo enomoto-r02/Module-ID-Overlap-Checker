@@ -44,6 +44,7 @@ namespace Module_ID_Overlap_Checker.DIVA
         {
             foreach (var mod in dmm.Mods)
             {
+                Console.WriteLine($"{ToolUtil.CONSOLE_PREFIX}[Load] {mod.Name} Loading.");
                 mod.GmModuleTblLoad();
                 if (File.Exists(mod.Path + "/rom/" + ModLogic.FILE_FARC_CHRITM_PROP_MOD))
                 {
@@ -73,6 +74,7 @@ namespace Module_ID_Overlap_Checker.DIVA
                 "Mod Name",
                 "Chara",
                 "Cos ID",
+                "Module Key",
                 "Module ID",
                 "Item No",
                 "Sub ID",
@@ -83,7 +85,7 @@ namespace Module_ID_Overlap_Checker.DIVA
 
             foreach (var mod in dmm.Mods)
             {
-                Console.WriteLine(ToolUtil.CONSOLE_PREFIX + "- " + mod.Name + " execute...");
+                Console.WriteLine($"{ToolUtil.CONSOLE_PREFIX}[Execute] {mod.Name} Execute.");
                 foreach (var chara_key in DivaUtil.CHARA_ITM_TBL.Keys)
                 {
                     sb.Append(ViewCharaItems(config, chara_key, mod, DivaUtil.CHARA_ITM_TBL[chara_key]));
@@ -116,11 +118,11 @@ namespace Module_ID_Overlap_Checker.DIVA
 
 
             List<Item> Gm_Module_ItemTbl = new();
-            if (mod.GmModule.Gm_Module_ItemTbl == null)
+            if (mod.Module.Module_ItemTbl == null)
             {
                 return null;
             }
-            foreach (var item in mod.GmModule.Gm_Module_ItemTbl.Items)
+            foreach (var item in mod.Module.Module_ItemTbl.Items)
             {
                 Item tmp = new Item();
                 tmp.Parameter = item.Parameter;
@@ -129,7 +131,7 @@ namespace Module_ID_Overlap_Checker.DIVA
             }
 
             List<Item> GmCustomizeModule = new();
-            foreach (var item in mod.GmCustomizeModule.Gm_Module_ItemTbl.Items)
+            foreach (var item in mod.CustomizeModule.Module_ItemTbl.Items)
             {
                 Item tmp = new Item();
                 tmp.Parameter = item.Parameter;

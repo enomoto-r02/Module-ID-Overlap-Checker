@@ -62,7 +62,7 @@ namespace Module_ID_Overlap_Checker.DIVA
 
             foreach (var item in DB)
             {
-                if (key == item.GetParameterStr())
+                if (key == item.ParameterStr())
                 {
                     return item;
                 }
@@ -81,7 +81,7 @@ namespace Module_ID_Overlap_Checker.DIVA
             List<Item> ret = new List<Item>();
             foreach (var item in DB)
             {
-                if (Regex.IsMatch(item.GetParameterStr(), key_regex))
+                if (Regex.IsMatch(item.ParameterStr(), key_regex))
                 {
                     ret.Add(item);
                 }
@@ -109,7 +109,7 @@ namespace Module_ID_Overlap_Checker.DIVA
                 }
                 else
                 {
-                    if (Regex.IsMatch(item.GetParameterStr(), key_regex))
+                    if (Regex.IsMatch(item.ParameterStr(), key_regex))
                     {
                         if (value == item.Value)
                         {

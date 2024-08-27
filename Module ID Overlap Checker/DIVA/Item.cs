@@ -7,7 +7,16 @@
         public string[] Parameter { get; set; }
         public string Value { get; set; }
 
-        public string GetParameterStr()
+        public string ValueStr()
+        {
+            if (this.Value == null)
+            {
+                return "";
+            }
+            return Value;
+        }
+
+        public string ParameterStr()
         {
             if (this.Parameter == null)
             {
